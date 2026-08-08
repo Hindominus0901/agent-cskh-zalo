@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "result": {
+    "event_name": "message.text.received",
+    "message": {
+      "from": {
+        "id": "test-chat-khong-co-that",
+        "display_name": "Nguoi Test",
+        "is_bot": false
+      },
+      "chat": {
+        "id": "test-chat-khong-co-that",
+        "chat_type": "PRIVATE"
+      },
+      "text": "cho em hoi ben minh tu van nhung gi a",
+      "message_id": "test-1785899291",
+      "date": 1785899291732
+    }
+  }
+}

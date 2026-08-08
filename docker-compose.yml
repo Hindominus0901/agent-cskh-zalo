@@ -1,0 +1,38 @@
+# Chay bot tren VPS.
+#
+#   docker compose up -d          chay nen
+#   docker compose logs -f        xem log
+#   docker compose restart        khoi dong lai sau khi sua kho tri thuc
+#   docker compose down           dung
+#
+# Xem docs/05-chuyen-len-vps.md de biet toan bo quy trinh.
+
+services:
+  bot:
+    build: .
+    image: zalo-agent:latest
+    container_name: zalo-agent
+    restart: unless-stopped
+
+    env_file: .env
+
+    volumes:
+      # Trang thai: CSDL, log, anh bien lai da tai. Phai giu lai.
+      - ./data:/app/data
+      # Kho tri thuc: sua file tren VPS roi nhan /nap cho bot, khong can restart.
+      - ./knowledge:/app/knowledge
+
+    # Chi mo cong khi chay webhook. Buoc vao 127.0.0.1 de chi reverse proxy
+    # (Caddy/nginx) goi duoc, khong phoi thang ra Internet.
+    ports:
+      - "127.0.0.1:8080:8080"
+
+    # Bot xu ly noi dung tu nguoi la gui den — siet quyen container lai.
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

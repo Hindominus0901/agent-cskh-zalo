@@ -1,0 +1,20 @@
+.env
+secrets/
+data/
+
+# knowledge/ CO theo doi phien ban — day la tai san kho lam lai nhat cua bot, va
+# nhan vien sua duoc no thang tu Zalo bang /themtrang. Mot lenh /xoatrang go nham
+# chi de lai dung mot ban .md.bak; co git thi luon lui lai duoc.
+#
+# NEU DAY REPO NAY LEN GITHUB THI PHAI DE PRIVATE:
+# knowledge/wiki/internal/ chua gia von, bien loi nhuan, kich ban noi bo.
+knowledge/**/*.md.bak
+knowledge/raw/
+
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.DS_Store

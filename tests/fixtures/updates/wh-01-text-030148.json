@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "result": {
+    "event_name": "message.text.received",
+    "message": {
+      "from": {
+        "id": "test-chat-khong-co-that",
+        "display_name": "Nguoi Test",
+        "is_bot": false
+      },
+      "chat": {
+        "id": "test-chat-khong-co-that",
+        "chat_type": "PRIVATE"
+      },
+      "text": "chào em, bên mình tư vấn những gì vậy?",
+      "message_id": "test-1785898907",
+      "date": 1785898907381
+    }
+  }
+}

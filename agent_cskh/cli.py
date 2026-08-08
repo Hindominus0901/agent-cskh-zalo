@@ -1,0 +1,242 @@
+"""Cong vao duy nhat: `agent-cskh <lenh>`. Giong het nhau tren Windows va macOS.
+
+    agent-cskh chat    chat ngay trong terminal — KHONG can token, khong can key
+    agent-cskh check   kiem tra cau hinh, in ra dung viec can lam tiep
+    agent-cskh chay    chay bot that tren Zalo
+
+`chat` la lenh quan trong nhat cua template nay. Nguoi vua nhan repo chua co
+Zalo OA (duyet mat mot ngay) va chua chac co API key. Neu buoc dau tien cua ho
+la "di xin token" thi phan lon se dung lai o do. Voi `chat` + che do `tra_cuu`,
+buoc dau tien la thay bot tra loi — trong vong vai phut, bang chinh kho tri thuc
+cua ho.
+"""
+
+from __future__ import annotations
+
+import asyncio
+import platform
+import sys
+
+MAC = platform.system() == "Darwin"
+
+
+def _in_dam(s: str) -> str:
+    return f"\033[1m{s}\033[0m" if sys.stdout.isatty() else s
+
+
+def _cach_cai(cai_gi: str) -> str:
+    """Chi in lenh cua HE DIEU HANH DANG CHAY.
+
+    In ca hai la cach nhanh nhat de mot nguoi dung Mac chep nham lenh PowerShell.
+    """
+    bang = {
+        "uv": ("brew install uv", "winget install astral-sh.uv"),
+    }
+    mac, win = bang[cai_gi]
+    return mac if MAC else win
+
+
+def _chat() -> int:
+    from agent_cskh.config import get_settings
+    from agent_cskh.security.whitelist import _scope_for
+    from agent_cskh.wiki import WikiStore
+
+    s = get_settings()
+    s.ensure_dirs()
+
+    wiki = WikiStore(s)
+    so_trang = wiki.reload()
+
+    print()
+    print(_in_dam(f"  Chat thu — chế độ {s.che_do}"))
+    print(f"  Kho tri thức: {so_trang} trang")
+    if so_trang == 0:
+        print()
+        print("  Kho đang TRỐNG nên bot chưa trả lời được gì.")
+        print("  Thêm trang vào knowledge/wiki/public/ rồi chạy lại.")
+        print("  Chưa có nội dung thì đọc CLAUDE.md — phần phỏng vấn.")
+    print()
+    print("  Gõ câu hỏi như một khách hàng. Ctrl+C để thoát.")
+    print("  Đổi vai: /vai stranger | /vai student | /vai staff")
+    print()
+
+    if s.che_do == "ai":
+        print("  CHE_DO=ai chưa dùng được trong `chat` — hiện chỉ chạy `tra_cuu`.")
+        print("  Muốn thử chế độ ai thì nối Zalo (xem docs/01-noi-zalo.md).")
+        print()
+
+    from agent_cskh.tra_cuu import DinhTuyenTraCuu
+
+    dinh_tuyen = DinhTuyenTraCuu(wiki)
+    vai = "stranger"
+    thieu: list[str] = []
+
+    try:
+        while True:
+            try:
+                cau = input(_in_dam("khách> ")).strip()
+            except EOFError:
+                break
+            if not cau:
+                continue
+            if cau.startswith("/vai "):
+                moi = cau.split(maxsplit=1)[1].strip()
+                if moi not in ("stranger", "student", "staff", "owner"):
+                    print("  Vai phải là: stranger | student | staff | owner\n")
+                    continue
+                vai = moi
+                print(f"  → đang đóng vai: {vai}\n")
+                continue
+
+            kq = dinh_tuyen.tra_loi(cau, chat_id="cli", scope=_scope_for(vai))  # type: ignore[arg-type]
+            print()
+            print(f"bot> {kq.text}")
+            if kq.can_nguoi_that:
+                print("     [bot đã chuyển cho người thật]")
+            if kq.cau_hoi_thieu:
+                thieu.append(kq.cau_hoi_thieu)
+            print()
+    except KeyboardInterrupt:
+        print()
+
+    if thieu:
+        print()
+        print(_in_dam(f"  {len(thieu)} câu bot KHÔNG trả lời được:"))
+        for c in thieu:
+            print(f"    • {c}")
+        print()
+        print("  Đây chính là danh sách trang cần viết thêm. Khi chạy thật trên")
+        print("  Zalo, những câu này tự vào bảng `thieu_trang` và lên báo cáo 20h.")
+        print()
+    return 0
+
+
+def _check() -> int:
+    """Preflight. In ra dung viec can lam tiep, theo dung he dieu hanh dang chay."""
+    from agent_cskh.config import get_settings
+    from agent_cskh.wiki import WikiStore
+
+    s = get_settings()
+    s.ensure_dirs()
+    xanh, do = [], []
+
+    def ok(msg: str) -> None:
+        xanh.append(f"  [ok]    {msg}")
+
+    def loi(msg: str, sua: str) -> None:
+        do.append(f"  [THIẾU] {msg}\n          → {sua}")
+
+    # --- moi truong ---
+    v = sys.version_info
+    if (v.major, v.minor) == (3, 12):
+        ok(f"Python {v.major}.{v.minor}.{v.micro}")
+    else:
+        loi(f"Python {v.major}.{v.minor} (cần 3.12)", f"cài uv rồi `uv sync`: {_cach_cai('uv')}")
+
+    # --- che do ---
+    ok(f"CHE_DO={s.che_do}" + ("  (0 đồng, không cần API key)" if s.che_do == "tra_cuu" else ""))
+    if s.che_do == "ai" and not s.anthropic_api_key.get_secret_value():
+        loi(
+            "CHE_DO=ai nhưng chưa có ANTHROPIC_API_KEY",
+            "lấy key tại console.anthropic.com, hoặc đổi về CHE_DO=tra_cuu",
+        )
+
+    # --- persona ---
+    persona = s.knowledge_dir / "persona.md"
+    if not persona.exists():
+        loi("Chưa có knowledge/persona.md", "đọc CLAUDE.md — phần phỏng vấn")
+    else:
+        noi_dung = persona.read_text(encoding="utf-8")
+        con_lai = noi_dung.count("[CHỜ HỌC VIÊN")
+        if con_lai:
+            loi(
+                f"persona.md còn {con_lai} chỗ [CHỜ HỌC VIÊN] chưa điền",
+                "phỏng vấn chủ doanh nghiệp rồi điền — KHÔNG được tự bịa",
+            )
+        else:
+            ok("persona.md đã điền xong")
+
+    # --- kho tri thuc ---
+    wiki = WikiStore(s)
+    so = wiki.reload()
+    moi_muc = frozenset({"public", "hocvien", "internal"})
+    trang = wiki.visible(moi_muc)
+    if so == 0:
+        loi("Kho tri thức trống", "phỏng vấn 10 câu khách hay hỏi rồi tạo trang trong knowledge/wiki/public/")
+    elif so < 5:
+        loi(f"Kho tri thức mới có {so} trang", "nên có ít nhất 5 trang trước khi đưa lên Zalo")
+    else:
+        ok(f"Kho tri thức: {so} trang")
+
+    thieu_tu_khoa = [p.slug for p in trang if not p.tu_khoa]
+    if thieu_tu_khoa:
+        loi(
+            f"{len(thieu_tu_khoa)} trang chưa có `tu_khoa`: {', '.join(thieu_tu_khoa[:5])}",
+            "thêm `tu_khoa: [...]` vào frontmatter — chế độ tra_cuu dựa hẳn vào nó",
+        )
+    elif trang:
+        ok("Mọi trang đều có `tu_khoa`")
+
+    # --- zalo (khong bat buoc) ---
+    if not s.token:
+        xanh.append("  [ ]     Chưa nối Zalo — chạy `agent-cskh chat` để thử trước")
+    elif ":" not in s.token:
+        loi("ZALO_BOT_TOKEN sai định dạng", "phải có dạng <id>:<secret>, lấy tại zalo.me/s/botcreator")
+    else:
+        ok("ZALO_BOT_TOKEN có định dạng đúng")
+        if not s.owner_user_ids:
+            loi(
+                "Chưa có OWNER_USER_IDS",
+                "chạy bot, nhắn /whoami cho nó, dán user_id vào .env",
+            )
+        else:
+            ok(f"OWNER_USER_IDS: {len(s.owner_user_ids)} người")
+
+    print()
+    for d in xanh:
+        print(d)
+    if do:
+        print()
+        for d in do:
+            print(d)
+        print()
+        print(f"  Còn {len(do)} việc. Xong hết rồi hãy nói là đã dựng xong.")
+        print()
+        return 1
+    print()
+    print("  Xanh hết. Chạy `uv run agent-cskh chat` để thử.")
+    print()
+    return 0
+
+
+async def _chay() -> int:
+    from agent_cskh.app import Application
+    from agent_cskh.config import get_settings
+    from agent_cskh.logging_setup import setup_logging
+
+    s = get_settings()
+    van_de = s.problems()
+    if van_de:
+        print("Chưa chạy được trên Zalo:")
+        for v in van_de:
+            print(f"  - {v}")
+        print("\nChạy `agent-cskh check` để xem chi tiết.")
+        return 1
+    setup_logging(s)
+    return await Application(s).run()
+
+
+def main() -> int:
+    lenh = sys.argv[1] if len(sys.argv) > 1 else "help"
+    if lenh == "chat":
+        return _chat()
+    if lenh == "check":
+        return _check()
+    if lenh in ("chay", "run"):
+        return asyncio.run(_chay())
+    print(__doc__)
+    return 0 if lenh in ("help", "-h", "--help") else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

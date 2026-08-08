@@ -1,0 +1,73 @@
+[project]
+name = "agent-cskh"
+version = "0.1.0"
+description = "Template AI Agent cham soc khach hang tren Zalo — kho tri thuc, harness, cong cu, skill"
+requires-python = ">=3.12,<3.13"
+
+dependencies = [
+    # Zalo
+    "httpx>=0.28",
+    "tenacity>=9.0",
+    # Cau hinh & log
+    "pydantic>=2.10",
+    "pydantic-settings>=2.7",
+    "structlog>=25.1",
+    # Luu tru
+    "aiosqlite>=0.20",
+    # LLM
+    "anthropic>=0.69",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.34",
+    "apscheduler>=3.11",
+    "pypdf>=5.1",
+]
+
+[project.scripts]
+agent-cskh = "agent_cskh.cli:main"
+
+# KHONG CO extra `rag` (vector database), va do la mot lua chon, khong phai thieu sot.
+#
+# Kho tri thuc chay bang LLM Wiki — Markdown thuan, danh muc nam san trong phan
+# duoc cache cua prompt. O quy mo vai chuc den vai tram trang thi cach do vua re
+# hon vua giai thich duoc, va no la thu duy nhat khien che do `tra_cuu` (0 dong,
+# khong API key) chay duoc.
+#
+# Ban goc tung khai bao extra `rag` voi lancedb + sentence-transformers. No keo
+# theo torch ~2,5GB, khong mot dong code nao dung toi, va tren VPS 1GB thi lenh
+# cai do that bai giua chung. Mot phu thuoc chet van ton chi phi that.
+#
+# Neu that su can tim theo ngu nghia sau nay: FTS5 (migration 002) da phu phan
+# lon, va viec do khong can torch.
+
+[dependency-groups]
+dev = ["pytest>=8.3", "pytest-asyncio>=0.25", "ruff>=0.9"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC", "S"]
+ignore = ["E501", "S101"]
+
+[tool.ruff.lint.per-file-ignores]
+# ASYNC109: `timeout` o day duoc chuyen thang xuong tang HTTP cua SDK (Zalo
+# long-poll, httpx, anthropic, google-genai) — khong phai timeout huy tac vu,
+# nen asyncio.timeout khong thay the duoc.
+"agent_cskh/transport/zalo_client.py" = ["ASYNC109"]
+"agent_cskh/llm/*.py" = ["ASYNC109"]
+# Provider gia phai khop chu ky cua LLMProvider, ke ca tham so `timeout`.
+"tests/conftest.py" = ["ASYNC109"]
+# Client gia phai khop chu ky cua ZaloClient.get_updates, ke ca tham so `timeout`.
+"tests/test_polling.py" = ["ASYNC109"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["agent_cskh"]
