@@ -18,6 +18,32 @@ một lần, mãi mãi. **Cứ để yên.**
 
 ---
 
+## `ModuleNotFoundError: No module named 'anthropic.types.beta.beta_managed_agents_...'`
+
+Hoặc bất kỳ `ModuleNotFoundError` nào trỏ vào một file có **tên rất dài** bên
+trong `.venv`.
+
+**Không phải thiếu thư viện.** Đây là giới hạn 260 ký tự đường dẫn của Windows.
+`uv sync` báo cài thành công, nhưng Python không mở nổi file có đường dẫn quá dài.
+
+Kiểm tra:
+
+```powershell
+(Get-Location).Path.Length
+```
+
+Trên 130 là nguy hiểm. Cách sửa duy nhất chắc chắn: **chuyển cả thư mục dự án ra
+chỗ ngắn hơn**, ví dụ `C:\agent-cskh`, rồi chạy lại `uv sync`.
+
+Hay dính khi clone vào `Documents\OneDrive\Dự án của tôi\...` — mỗi cấp thư mục
+tiếng Việt ăn thêm chục ký tự.
+
+*(macOS không có vấn đề này.)*
+
+`uv run agent-cskh check` sẽ cảnh báo trước khi bạn dính lỗi này.
+
+---
+
 ## `Khong xac thuc duoc voi Zalo`
 
 Token sai. Kiểm theo thứ tự:

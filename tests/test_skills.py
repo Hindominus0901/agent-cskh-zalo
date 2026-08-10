@@ -131,6 +131,41 @@ class TestMucLuc:
             assert k.doc(xau) is None
 
 
+class TestBoSkillShipKemPhaiNapDuoc:
+    """Doc THAT thu muc `skills/` cua repo, khong dung tmp_path.
+
+    Bo skill la mot phan cua san pham, khong phai vi du. Neu no bien mat — bi
+    xoa nham, quen chep vao Docker image, doi ten thu muc — thi `KhoSkill.nap()`
+    tra ve 0 va bot mat sach quy trinh MA KHONG BAO GI CA. Khong co dong loi
+    nao, chi la bot bong tra loi kem di.
+
+    Da xay ra that 10/08/2026: Dockerfile chep `agent_cskh/` va `scripts/` nhung
+    quen `skills/`.
+    """
+
+    def _kho(self):
+        from agent_cskh.config import Settings
+        from agent_cskh.skills import KhoSkill
+
+        k = KhoSkill(Settings(_env_file=None))
+        k.nap()
+        return k
+
+    def test_nap_duoc_bo_skill_that(self) -> None:
+        assert len(self._kho().duoc_nap()) >= 5
+
+    def test_moi_skill_deu_co_mo_ta_va_khi_nao(self) -> None:
+        """Thieu `khi_nao` thi model khong biet luc nao nen mo skill do — no nam
+        trong muc luc nhu mot dong trang tri."""
+        for s in self._kho().duoc_nap():
+            assert "thiếu mô tả" not in s.mo_ta, s.ten
+            assert s.khi_nao, f"{s.ten} thiếu trường `when`"
+
+    def test_khong_skill_nao_rong_ruot(self) -> None:
+        for s in self._kho().duoc_nap():
+            assert len(s.than_bai) > 200, f"{s.ten} gần như không có nội dung"
+
+
 class TestMucLucKhopVoiCongCu:
     def test_cong_cu_doc_skill_CO_THAT_trong_registry(self) -> None:
         """Ban goc (C:\\TOM) bao model "doc file skills/<ten>/SKILL.md bang

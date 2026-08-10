@@ -10,8 +10,8 @@
 services:
   bot:
     build: .
-    image: zalo-agent:latest
-    container_name: zalo-agent
+    image: agent-cskh:latest
+    container_name: agent-cskh
     restart: unless-stopped
 
     env_file: .env

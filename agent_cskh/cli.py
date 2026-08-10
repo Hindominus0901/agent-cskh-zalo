@@ -133,6 +133,34 @@ def _check() -> int:
     else:
         loi(f"Python {v.major}.{v.minor} (cần 3.12)", f"cài uv rồi `uv sync`: {_cach_cai('uv')}")
 
+    # --- do dai duong dan (chi Windows) ---
+    #
+    # Windows chan duong dan qua 260 ky tu tru khi bat LongPathsEnabled. Thu vien
+    # `anthropic` co mot file ten dai 77 ky tu, nam sau
+    # `.venv\\Lib\\site-packages\\anthropic\\types\\beta\\` — cong lai khoang 121
+    # ky tu. Thu muc du an dai qua ~130 la file do khong import duoc.
+    #
+    # Do duoc 10/08/2026: clone vao mot duong dan 260 ky tu -> `uv sync` bao
+    # thanh cong, roi `pytest` chet bang
+    #   ModuleNotFoundError: No module named
+    #   'anthropic.types.beta.beta_managed_agents_session_resource_not_found_...'
+    # Khong ai doan duoc tu thong bao do rang van de la DUONG DAN QUA DAI. Bat
+    # o day de bien no thanh mot cau doc duoc.
+    if not MAC and sys.platform == "win32":
+        from agent_cskh.config import ROOT
+
+        do_dai = len(str(ROOT))
+        if do_dai > 130:
+            loi(
+                f"Đường dẫn thư mục dài {do_dai} ký tự — Windows sẽ lỗi khi cài thư viện",
+                "chuyển cả thư mục ra chỗ ngắn hơn, ví dụ C:\\agent-cskh, rồi `uv sync` lại",
+            )
+        elif do_dai > 100:
+            xanh.append(
+                f"  [ ]     Đường dẫn dài {do_dai} ký tự — còn chạy được, "
+                f"nhưng nên chuyển ra chỗ ngắn hơn cho chắc"
+            )
+
     # --- che do ---
     ok(f"CHE_DO={s.che_do}" + ("  (0 đồng, không cần API key)" if s.che_do == "tra_cuu" else ""))
     if s.che_do == "ai" and not s.anthropic_api_key.get_secret_value():

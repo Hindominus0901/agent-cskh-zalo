@@ -31,6 +31,11 @@ RUN uv sync --frozen --no-install-project --no-dev
 
 COPY agent_cskh/ ./agent_cskh/
 COPY scripts/ ./scripts/
+# skills/ PHAI duoc chep vao. Quen no thi `KhoSkill.nap()` tra ve 0 va bot mat
+# sach quy trinh — im lang, khong mot dong loi nao, chi la bot bong tra loi kem
+# di. Khac `knowledge/` (la volume, nguoi dung tu gan), `skills/` di theo ma
+# nguon vi no la mot phan cua san pham.
+COPY skills/ ./skills/
 RUN uv sync --frozen --no-dev
 
 RUN useradd --create-home --uid 10001 bot \
