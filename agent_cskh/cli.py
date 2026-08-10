@@ -177,6 +177,33 @@ def _check() -> int:
     elif trang:
         ok("Mọi trang đều có `tu_khoa`")
 
+    qua_dai = [p.slug for p in trang if len(p.body) > 1400]
+    if qua_dai:
+        loi(
+            f"{len(qua_dai)} trang dài quá 1400 ký tự: {', '.join(qua_dai[:5])}",
+            "bot cắt ở 1400 — phần sau không tới được khách. Tách thành nhiều trang.",
+        )
+
+    # --- ky nang ---
+    from agent_cskh.skills import KhoSkill
+
+    kho_skill = KhoSkill(s)
+    kho_skill.nap()
+    duoc_nap = kho_skill.duoc_nap()
+    cho_duyet = kho_skill.cho_duyet()
+    if duoc_nap:
+        ok(f"Kỹ năng: {len(duoc_nap)} cái đang dùng")
+    else:
+        xanh.append("  [ ]     Chưa có kỹ năng nào — không bắt buộc")
+    if cho_duyet:
+        # KHONG phai loi. Skill cho duyet la he thong dang lam dung viec cua no.
+        # Nhung phai hien ra, vi mot skill nam mai o trang thai `nhap` thi khong
+        # ai biet no dang doi.
+        xanh.append(
+            f"  [ ]     {len(cho_duyet)} kỹ năng chờ duyệt: "
+            f"{', '.join(x.ten for x in cho_duyet[:3])}"
+        )
+
     # --- zalo (khong bat buoc) ---
     if not s.token:
         xanh.append("  [ ]     Chưa nối Zalo — chạy `agent-cskh chat` để thử trước")

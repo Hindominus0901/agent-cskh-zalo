@@ -100,9 +100,10 @@ class ToolRegistry:
             # DAU CA — phat hien 08/08/2026. Mot cong cu treo se an het 180 giay
             # cua ca luot, va khach chi thay bot im lang roi bao loi he thong.
             #
-            # Cac cong cu hien tai deu tu co tran rieng (web_fetch 10s, model
-            # 90s), nen tran nay la LUOI DO PHONG cho cong cu sau nay — nhat la
-            # cau noi MCP, noi do tre nam o may nguoi khac.
+            # Cac cong cu hien tai deu re va cham dia, hoac tu co tran rieng
+            # (goi model 90s), nen tran nay la LUOI DO PHONG cho cong cu ban
+            # them sau — nhat la cong cu goi ra mang hoac cau noi MCP, noi do
+            # tre nam o may nguoi khac.
             async with asyncio.timeout(ctx.settings.tool_timeout):
                 return await tool.handler(ctx, args or {}), False
         except TimeoutError:
