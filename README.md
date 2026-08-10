@@ -55,6 +55,16 @@ người thật.
 
 Với khoảng 80% câu hỏi CSKH lặp đi lặp lại, thế là đủ dùng.
 
+> **Một điều phải biết về chế độ `tra_cuu`:** nó **không đọc `persona.md`**. Mọi
+> luật kiểu *"khách hỏi X thì phải chuyển người thật"* bạn viết trong persona chỉ
+> có hiệu lực ở chế độ `ai`. Ở chế độ miễn phí, thứ duy nhất bot đọc là **trang
+> wiki** — nên ràng buộc nào quan trọng thì viết thẳng vào thân trang.
+>
+> Ví dụ thật: quán cà phê khai *"khách hỏi hôm nay còn chỗ không thì chuyển người"*.
+> Bot vẫn trả về trang "Chỗ ngồi" (quán có 40 chỗ) — đúng về tra cứu, sai về
+> nghiệp vụ. Cách sửa: thêm một dòng vào chính trang đó — *"Còn chỗ hay không thì
+> anh/chị nhắn trực tiếp để bên em xem giúp ạ."*
+
 **Đổi chế độ là đổi một dòng trong `.env`.** Cùng một kho tri thức, không phải
 làm lại gì cả.
 

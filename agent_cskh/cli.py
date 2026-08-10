@@ -147,7 +147,16 @@ def _check() -> int:
         loi("Chưa có knowledge/persona.md", "đọc CLAUDE.md — phần phỏng vấn")
     else:
         noi_dung = persona.read_text(encoding="utf-8")
-        con_lai = noi_dung.count("[CHỜ HỌC VIÊN")
+        # Dem `[CHỜ HỌC VIÊN:` CO DAU HAI CHAM, khong dem `[CHỜ HỌC VIÊN]`.
+        #
+        # Cho trong that luon co dau hai cham roi den cau hoi cu the. Con dang
+        # khong dau hai cham chi xuat hien trong doan huong dan o dau file, va
+        # doan do khong bao gio bien mat.
+        #
+        # Dem ca hai dang thi `check` KHONG BAO GIO XANH duoc, du hoc vien da
+        # dien het — phat hien luc di thu tron duong cua hoc vien. Mot preflight
+        # khong bao gio xanh thi chi vai ngay la khong ai nhin no nua.
+        con_lai = noi_dung.count("[CHỜ HỌC VIÊN:")
         if con_lai:
             loi(
                 f"persona.md còn {con_lai} chỗ [CHỜ HỌC VIÊN] chưa điền",

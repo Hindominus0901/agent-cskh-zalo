@@ -44,6 +44,38 @@ FRONTMATTER_SEP = "---"
 MAX_PAGE_CHARS = 12_000
 SNIPPET_CHARS = 400
 
+# HU TU — bo khoi truy van truoc khi cham diem.
+#
+# Vi sao can: diem cham theo so lan khop, va moi lan khop o tieu de/tom tat/
+# tu_khoa an 5 diem. Nhung tu nhu "khong", "co", "cho" nam rai trong tu_khoa va
+# tieu de cua GAN NHU MOI trang, nen chung mot minh du de lat nguoc thu tu.
+#
+# Do duoc ngay 10/08/2026 tren mot kho 5 trang: cau "chỗ mình có ship không"
+# tra ve trang "Chỗ ngồi" thay vi "Giao hàng" — vi "cho" + "khong" an 15 diem
+# cho trang cho-ngoi, con "ship" chi an 5 cho trang dung. Cau "quán có bán bánh
+# ngọt không" (khong co trong kho) le ra phai chuyen nguoi that thi lai dua ra
+# ba lua chon vo quan, cung vi ba hu tu do.
+#
+# Luu y ve dau: danh sach nay o dang DA BO DAU, nen mot muc bat nhieu tu that.
+# "cho" bat ca "cho" (gioi tu) lan "chỗ" (danh tu) — chap nhan duoc, vi bo mot
+# tu mo ho khoi truy van chi lam ket qua HEP lai, ma hep thi roi ve phia
+# "khong biet" -> chuyen nguoi that. Do la huong sai an toan.
+#
+# Truy van chi toan hu tu se con rong -> `search_scored` tra [] -> bot noi that
+# la chua nam duoc. Dung nhu mong muon.
+HU_TU = frozenset(
+    """
+    a o oi u um da vang da_vang
+    co khong con chua duoc dang se da van cung deu
+    la cua va voi cho den tu ve tai boi bang theo
+    nay do kia ay cai chiec con_nay
+    minh ban em anh chi ho toi tao may
+    the thi ma nhe nha nhi day roi luon a_ha
+    rat qua hoi kha lam nhieu it
+    xin cam_on giup gium ho
+    """.split()
+)
+
 
 def strip_accents(text: str) -> str:
     """Bo dau tieng Viet de khop duoc khi khach go khong dau ("bao gia")."""
@@ -243,8 +275,10 @@ class WikiStore:
         q = strip_accents(query).strip()
         if not q:
             return []
-        terms = [t for t in q.split() if len(t) > 1]
+        terms = [t for t in q.split() if len(t) > 1 and t not in HU_TU]
         if not terms:
+            # Ca cau chi toan hu tu ("co khong a", "the a"). Khong doan bua —
+            # tra rong de ben goi noi that la chua nam duoc.
             return []
 
         # Khop theo RANH GIOI TU, khong phai chuoi con. Tieng Viet viet roi am tiet
@@ -264,6 +298,26 @@ class WikiStore:
                 score += len(pat.findall(body))
             if q in head:
                 score += 20
+
+            # CUM `tu_khoa` KHOP NGUYEN VAN — tin hieu manh nhat trong ca ham.
+            #
+            # Chu doanh nghiep khai "mac khong" nghia la ho da noi thang: khach
+            # hoi kieu do la hoi trang nay. Cham tung tu le thi cum do tan ra —
+            # "mac" an 5 diem, con "khong" bi loc mat vi la hu tu — va tong lai
+            # khong du nguong, nen bot chuyen nguoi that cho mot cau ma chinh
+            # chu da day no tra loi.
+            #
+            # Do duoc 10/08/2026: "cái này mắc không" roi xuong "khong biet" du
+            # trang bang gia khai dung cum "mac khong".
+            #
+            # Doi chieu voi `q` CHUA LOC hu tu, vi cum khai bao thuong chua chung
+            # ("mac khong", "co dat khong", "hong thi sao").
+            for cum in page.tu_khoa:
+                c = strip_accents(cum).strip()
+                if len(c) > 2 and c in q:
+                    score += 25
+                    break
+
             if score:
                 scored.append((score, page))
 

@@ -9,8 +9,8 @@ loãng.
 
 > **ĐANG LÀ BẢN MẪU.** Mọi chỗ ghi `[CHỜ HỌC VIÊN]` phải được thay bằng câu trả
 > lời **nguyên văn của chủ doanh nghiệp**. Không được đoán, không được lấy kiến
-> thức chung về ngành điền vào. `scripts/kiem_tra.py` sẽ báo đỏ tới khi nào hết
-> sạch các dấu này.
+> thức chung về ngành điền vào. `uv run agent-cskh check` sẽ báo đỏ tới khi
+> nào hết sạch các dấu này.
 >
 > Những phần **không** có dấu đó là ràng buộc an toàn — chúng đúng với mọi ngành.
 > Đừng xoá. `tests/test_authz.py::TestPersonaCoDuThanhPhan` canh đúng việc đó.

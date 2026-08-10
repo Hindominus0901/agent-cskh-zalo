@@ -159,6 +159,47 @@ class TestTraLoiDung:
         assert not kq.can_nguoi_that
 
 
+class TestHuTuKhongDuocAnDiem:
+    """Do duoc 10/08/2026 khi di tron duong cua mot hoc vien that.
+
+    Diem cham theo so lan khop, moi lan o tieu de/tom tat/tu_khoa an 5 diem.
+    Nhung "khong", "co", "cho" nam rai trong tu_khoa va tieu de cua gan nhu moi
+    trang, nen chung mot minh du de lat nguoc thu tu.
+    """
+
+    def test_hu_tu_khong_keo_nham_sang_trang_khac(self, wiki) -> None:
+        """Cau that: "chỗ mình có ship không" tung tra ve trang bao hanh/cho ngoi
+        thay vi giao hang, vi "cho" + "khong" an 15 diem con "ship" chi an 5."""
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("chỗ mình có bảo hành không", chat_id="c1", scope=CONG_KHAI)
+        assert "24 tháng" in kq.text
+
+    def test_cau_toan_hu_tu_thi_khong_doan_bua(self, wiki) -> None:
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("có không ạ", chat_id="c1", scope=CONG_KHAI)
+        assert kq.can_nguoi_that
+
+
+class TestCumTuKhoaKhopNguyenVan:
+    """Chu doanh nghiep khai mot cum vao `tu_khoa` la ho da noi thang: khach hoi
+    kieu do la hoi trang nay. Cham tung tu le thi cum do tan ra."""
+
+    def test_cum_khai_bao_phai_thang_du_lan_trong_hu_tu(self, wiki) -> None:
+        """"cái này mắc không" — "cai"/"nay"/"khong" deu la hu tu bi loc, chi con
+        "mac". Neu khong co thuong cho cum khai bao thi tong diem khong du nguong
+        va bot chuyen nguoi that cho mot cau ma chinh chu da day no tra loi."""
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("cái này mắc không", chat_id="c1", scope=CONG_KHAI)
+        assert "5 triệu" in kq.text
+        assert not kq.can_nguoi_that
+
+    def test_cum_khong_khai_thi_van_khong_biet(self, wiki) -> None:
+        """Thuong cho cum khong duoc bien thanh cai co de tra loi bua."""
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("quán có bán bánh ngọt không", chat_id="c1", scope=CONG_KHAI)
+        assert kq.can_nguoi_that
+
+
 class TestKhongBietThiGhiLai:
     """Nua kia cua vong lap hoc. Bot tu choi rat ngoan ma khong ghi lai thi chu
     bot khong bao gio biet phai viet them trang gi."""
@@ -204,13 +245,18 @@ class TestHoiLaiBangSo:
         thu 2 cua danh sach cho) ra nhu mot cau tra loi chac chan — trong khi
         khach chi vua hoi mot cau moi. Diem cua no phai duoc tinh lai tu dau.
         """
+        # Xep bao-hanh o vi tri SO 2 de phep thu khong mo ho: neu bot hieu nham
+        # "2" la lua chon thi no se bung trang bao hanh, mot trang chang lien
+        # quan gi toi cau hoi ve gia.
         dt = DinhTuyenTraCuu(wiki)
-        dt._cho_chon["c1"] = ["bao-hanh", "bang-gia"]  # noqa: SLF001
+        dt._cho_chon["c1"] = ["bang-gia", "bao-hanh"]  # noqa: SLF001
         kq = dt.tra_loi("2 cái giá bao nhiêu", chat_id="c1", scope=CONG_KHAI)
-        # KHONG duoc mo thang trang thu 2 nhu mot lua chon.
-        assert "5 triệu" not in kq.text
+        # KHONG duoc mo trang thu 2 nhu mot lua chon...
+        assert "24 tháng" not in kq.text
+        # ...ma phai tinh diem lai tu dau va ra dung trang gia.
+        assert "5 triệu" in kq.text
         # Trang thai cho chon phai bi xoa — cau sau khong con la lua chon nua.
-        assert "c1" not in dt._cho_chon or dt._cho_chon.get("c1") != ["bao-hanh", "bang-gia"]  # noqa: SLF001
+        assert dt._cho_chon.get("c1") is None  # noqa: SLF001
 
     def test_trang_thai_cho_chon_khong_ro_ri_giua_hai_khach(self, wiki) -> None:
         dt = DinhTuyenTraCuu(wiki)

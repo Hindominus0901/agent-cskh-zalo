@@ -24,6 +24,22 @@ GIOI HAN, noi thang de khong ai ky vong nham:
     thi no khong biet "cai do" la gi.
   - Khong suy luan, khong tong hop tu hai trang.
   - Khong dung duoc cong cu hay skill.
+
+  - QUAN TRONG NHAT: che do nay KHONG DOC `persona.md`. Nghia la moi luat
+    "phai chuyen nguoi that khi..." ma chu doanh nghiep khai trong persona deu
+    KHONG CO HIEU LUC o day. No chi biet mot luat duy nhat: khong tim thay
+    trang thi chuyen nguoi.
+
+    Do duoc 10/08/2026: mot quan ca phe khai trong persona "khach hoi hom nay
+    con cho khong thi phai chuyen nguoi that". Che do `tra_cuu` van tra ve
+    trang "Cho ngoi va khong gian" — dung ve tra cuu (quan co 40 cho), sai ve
+    nghiep vu (hom nay con hay het thi no khong biet).
+
+    Cach song chung: viet thang cau do vao than bai trang lien quan. O vi du
+    tren, trang "Cho ngoi" nen co mot dong "Con cho hay khong thi anh/chi nhan
+    truc tiep de ben em xem giup a." Trang la thu duy nhat che do nay doc, nen
+    moi rang buoc phai nam trong trang.
+
 Doi `CHE_DO=ai` trong `.env` de co nhung thu do. Cung mot kho tri thuc.
 """
 
