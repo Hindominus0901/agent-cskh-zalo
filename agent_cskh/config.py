@@ -160,7 +160,7 @@ class Settings(BaseSettings):
         """
         out: list[str] = []
         if not self.token:
-            out.append("ZALO_BOT_TOKEN trong — lay tai https://zalo.me/s/botcreator/")
+            out.append("ZALO_BOT_TOKEN trong — tao bot trong app Zalo qua OA \"Zalo Bot Manager\", xem docs/01-noi-zalo.md")
         elif ":" not in self.token:
             out.append("ZALO_BOT_TOKEN sai dinh dang (phai co dang <id>:<secret>)")
         if self.che_do == "ai" and not self.anthropic_api_key.get_secret_value():

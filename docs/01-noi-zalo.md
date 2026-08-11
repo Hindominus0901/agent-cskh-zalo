@@ -1,38 +1,71 @@
-# Đưa bot lên Zalo — từ A đến Z
+# Đưa bot lên Zalo bằng Zalo Bot Creator — từ A đến Z
 
 Viết cho người chưa từng làm. Làm đúng thứ tự, đừng nhảy bước.
 
 **Trước khi bắt đầu:** bot phải chạy được trong terminal đã. Chưa chạy được
-`uv run agent-cskh chat` thì quay lại `HUONG-DAN-AGENT.md` — nối Zalo không sửa được vấn
-đề của kho tri thức.
+`uv run agent-cskh chat` thì quay lại `HUONG-DAN-AGENT.md` — nối Zalo không sửa
+được vấn đề của kho tri thức.
 
-Tổng thời gian: khoảng 30 phút, **cộng thêm ~1 ngày chờ Zalo duyệt OA** ở bước 1.
-
----
-
-## Bước 1 — Tạo Zalo OA (~1 ngày chờ duyệt)
-
-Zalo Bot phải gắn vào một **Official Account**. Chưa có thì tạo trước.
-
-1. Vào **https://oa.zalo.me** → *Tạo Official Account*
-2. Chọn loại phù hợp (doanh nghiệp / cá nhân)
-3. Điền thông tin và tải giấy tờ (CCCD hoặc giấy phép kinh doanh)
-4. Chờ duyệt — thường trong vòng một ngày làm việc
-
-Trong lúc chờ, cứ dùng `uv run agent-cskh chat` để hoàn thiện kho tri thức. Toàn
-bộ công sức đó dùng lại được y nguyên.
+Tổng thời gian: **khoảng 30 phút**, không phải chờ duyệt gì cả.
 
 ---
 
-## Bước 2 — Tạo bot và lấy token (~5 phút)
+## Trước hết: Zalo có HAI loại bot khác nhau
 
-1. Vào **https://zalo.me/s/botcreator/**
-2. Đăng nhập bằng tài khoản Zalo đang quản lý OA ở bước 1
-3. Tạo bot mới, đặt tên và ảnh đại diện
-4. Copy **token** — chuỗi có dạng `1234567890:AbCdEf...`
+Đây là chỗ làm nhiều người mất cả ngày vô ích, nên nói rõ ngay từ đầu.
 
-**Token này là chìa khoá vào bot của bạn.** Đừng gửi cho ai, đừng chụp màn hình
-đăng lên nhóm, đừng commit lên GitHub.
+| | **Zalo Bot Creator** ← template này dùng | Zalo OA (Official Account) |
+|---|---|---|
+| Tạo từ | Tài khoản Zalo cá nhân | Doanh nghiệp, cần giấy tờ |
+| Chờ duyệt | Không | Có, thường ~1 ngày |
+| Lấy token | Zalo nhắn tin cho bạn | Cổng developers.zalo.me |
+| API | `bot-api.zaloplatforms.com` | `openapi.zalo.me` |
+
+**Hai thứ này là hai sản phẩm riêng biệt**, không phải hai mức của cùng một thứ.
+Template này chạy trên **Zalo Bot Creator**, và bạn **không cần OA doanh nghiệp**
+để bắt đầu.
+
+Nếu đọc ở đâu đó bảo "phải có OA đã" thì đó là hướng dẫn cho loại thứ hai.
+
+---
+
+## Bước 1 — Tạo bot trong ứng dụng Zalo (~5 phút)
+
+Làm **trên điện thoại**, ngay trong app Zalo.
+
+1. Mở Zalo, vào ô tìm kiếm, gõ **`Zalo Bot Manager`**
+2. Mở Official Account đó (đây là OA của chính Zalo, không phải của bạn)
+3. Trong khung chat, mở menu và chọn **"Tạo bot"** — nó bật lên ứng dụng
+   **Zalo Bot Creator**
+4. Điền thông tin bot:
+   - **Tên bot phải bắt đầu bằng chữ `Bot`.** Ví dụ: `Bot Gác Nhỏ`,
+     `Bot Shop Hoa`. Không có tiền tố này là không tạo được.
+   - Ảnh đại diện, mô tả
+5. Bấm **"Tạo Bot"**
+
+---
+
+## Bước 2 — Nhận token (~1 phút)
+
+**Token KHÔNG hiện trên màn hình.** Zalo **nhắn tin cho bạn** — token nằm trong
+tin nhắn từ Zalo Bot Manager trong chính Zalo của bạn.
+
+Nó có dạng:
+
+```
+1234567890:AbCdEfGhIjKlMnOpQrStUvWxYz
+```
+
+Một dãy số, dấu hai chấm, rồi một chuỗi chữ.
+
+> **Token này là chìa khoá vào bot của bạn.** Ai có nó thì nhắn được thay bạn và
+> đọc được tin khách gửi. Đừng gửi cho ai, đừng chụp màn hình đăng lên nhóm,
+> đừng dán vào chat với AI, đừng commit lên GitHub.
+>
+> Lỡ lộ thì vào Zalo Bot Creator thu hồi và cấp lại token mới — token cũ chết ngay.
+
+Cách chuyển token từ điện thoại sang máy tính an toàn: tự nhắn cho chính mình
+trong Zalo rồi mở Zalo trên máy tính mà copy. Đừng chụp màn hình gửi qua nhóm.
 
 ---
 
@@ -53,7 +86,7 @@ ZALO_BOT_TOKEN=
 Dán token vào ngay sau dấu `=`, **không có dấu cách, không có dấu ngoặc kép**:
 
 ```
-ZALO_BOT_TOKEN=1234567890:AbCdEf...
+ZALO_BOT_TOKEN=1234567890:AbCdEfGhIjKlMnOpQrStUvWxYz
 ```
 
 Lưu lại.
@@ -68,8 +101,8 @@ uv run agent-cskh check
 
 Phải thấy dòng `[ok] ZALO_BOT_TOKEN có định dạng đúng`.
 
-Báo sai định dạng thì kiểm lại: token phải có dấu hai chấm `:` ở giữa, và không
-dính dấu cách thừa ở đầu hay cuối.
+Báo sai định dạng thì kiểm lại: token phải có dấu hai chấm `:` ở giữa, không
+dính dấu cách thừa ở đầu hay cuối, và bạn copy **cả dãy** chứ không phải một nửa.
 
 ---
 
@@ -83,27 +116,41 @@ Thấy dòng `Bot: <tên bot> (id=...)` là đã kết nối được.
 
 **Cứ để cửa sổ này mở.** Đóng nó là bot tắt.
 
+Thấy `error_code: 408` chạy đi chạy lại thì **kệ nó** — đó là bình thường, không
+phải lỗi. Xem [03-loi-hay-gap.md](03-loi-hay-gap.md).
+
 ---
 
-## Bước 6 — Nhận quyền quản trị (~3 phút)
+## Bước 6 — Tìm bot của mình trong Zalo (~2 phút)
+
+Bot vừa tạo không tự hiện trong danh bạ. Hai cách mở:
+
+- Trong **Zalo Bot Creator**, mở bot của bạn, vào mục **Chia sẻ** — có sẵn một
+  **Deeplink chính thức**. Bấm vào là mở chat với bot.
+- Hoặc tìm theo tên bot trong ô tìm kiếm Zalo.
+
+Nhắn thử một câu bất kỳ. Bot trả lời là xong phần kết nối.
+
+---
+
+## Bước 7 — Nhận quyền quản trị (~3 phút)
 
 Bot đang chạy nhưng chưa biết bạn là chủ. Nó coi bạn như một khách lạ.
 
-1. Mở Zalo trên điện thoại, tìm bot của bạn (tên đặt ở bước 2)
-2. Nhắn cho bot: **`/whoami`**
-3. Bot trả về `user_id` và `chat_id` của bạn
-4. Copy `user_id`, mở lại `.env`, dán vào:
+1. Nhắn cho bot: **`/whoami`**
+2. Bot trả về `user_id` và `chat_id` của bạn
+3. Copy `user_id`, mở lại `.env`, dán vào:
 
 ```
 OWNER_USER_IDS=user_id_vua_copy
 ```
 
-5. **Tắt bot (Ctrl+C) rồi chạy lại** — `.env` chỉ được đọc lúc khởi động
-6. Nhắn `/whoami` lần nữa, giờ phải thấy `quyền hiện tại: owner`
+4. **Tắt bot (Ctrl+C) rồi chạy lại** — `.env` chỉ được đọc lúc khởi động
+5. Nhắn `/whoami` lần nữa, giờ phải thấy `quyền hiện tại: owner`
 
 ---
 
-## Bước 7 — Đặt kênh nhận cảnh báo (~1 phút)
+## Bước 8 — Đặt kênh nhận cảnh báo (~1 phút)
 
 Bot cần một chỗ để báo khi có khách đang chờ, hoặc khi nó gặp sự cố.
 
@@ -114,7 +161,7 @@ Trong **chat riêng** giữa bạn và bot, nhắn: **`/datkenhcanhbao`**
 
 ---
 
-## Bước 8 — Thử bằng câu thật (~5 phút)
+## Bước 9 — Thử bằng câu thật (~5 phút)
 
 Nhắn cho bot **5 câu mà khách hay hỏi nhất**, đúng cách khách hay gõ (viết tắt,
 không dấu, sai chính tả — cứ thử thật).
@@ -123,15 +170,36 @@ không dấu, sai chính tả — cứ thử thật).
 - Trả lời sai trang → thêm cách hỏi đó vào `tu_khoa` của trang đúng
 - Nói "chưa nắm chắc" → kho thiếu trang đó, viết thêm
 
-Sửa xong file thì nhắn **`/nap`** cho bot — nó nạp lại ngay, không cần khởi động lại.
+Sửa xong file thì nhắn **`/nap`** cho bot — nó nạp lại ngay, không cần khởi động
+lại.
 
 ---
 
-## Bước 9 — Cho bot tự chạy mỗi khi bật máy (~2 phút)
+## Bước 10 — Cho bot tự chạy mỗi khi bật máy (~2 phút)
 
 | Windows | macOS |
 |---|---|
 | `.\scripts\cai_tu_khoi_dong.ps1` | `./scripts/cai_tu_khoi_dong.sh` |
+
+---
+
+## Bảng điều khiển trong Zalo Bot Creator
+
+Mở ứng dụng Zalo Bot Creator bất cứ lúc nào để xem:
+
+| Tab | Có gì |
+|---|---|
+| **Thông tin** | Trạng thái bot, **Tổng số người dùng** đã tương tác |
+| **Chia sẻ** | Deeplink chính thức để gửi cho khách |
+| Cài đặt | Đổi tên, ảnh, thu hồi và cấp lại token |
+
+**Mẹo chẩn đoán đáng giá:** nếu bot của bạn không nhận được tin nào mà
+**"Tổng số người dùng" vẫn là 0** dù bạn đã nhắn cho nó nhiều lần — thì tin nhắn
+không hề được gắn vào cuộc hội thoại nào ở phía Zalo. Lúc đó vấn đề nằm ở Zalo,
+không phải ở máy bạn, và không có gì để sửa từ phía mình.
+
+Chuyện này đã xảy ra thật ngày 05/08/2026: `getUpdates` trả 502/504 trên **mọi**
+bot trong khoảng 2 tiếng rồi tự hồi phục.
 
 ---
 
@@ -161,3 +229,26 @@ Muốn chạy thật lâu dài thì thuê VPS: [05-chuyen-len-vps.md](05-chuyen-
 
 Xem [03-loi-hay-gap.md](03-loi-hay-gap.md) trước. Lỗi hay làm người ta hoảng nhất
 — `error_code: 408` — **là bình thường**, không phải hỏng.
+
+---
+
+## Nguồn và mức tin cậy
+
+Tài liệu này ghép từ ba nguồn, và có chỗ chắc chắn hơn chỗ khác:
+
+**Chắc chắn — đã chạy thật trên hệ thống:** đường API
+`bot-api.zaloplatforms.com/bot<TOKEN>/<method>`, dạng token `số:chuỗi`, ý nghĩa
+của `error_code: 408`, việc `getUpdates` không có `offset` (tắt máy là mất tin),
+các tab trong Zalo Bot Creator, và sự cố 05/08/2026.
+
+**Từ tài liệu chính thức của Zalo** ([bot.zapps.me/docs/create-bot](https://bot.zapps.me/docs/create-bot/)):
+luồng tạo bot qua OA *Zalo Bot Manager*, quy tắc tên bot phải bắt đầu bằng `Bot`,
+và việc token được gửi qua tin nhắn.
+
+**Chưa tự kiểm chứng:** các bước bấm nút cụ thể trong ứng dụng Zalo Bot Creator —
+giao diện có thể đã đổi. Nếu bạn thấy khác, sửa lại file này giúp.
+
+Nguồn tham khảo:
+- [Tài liệu Zalo Bot — Tạo Bot](https://bot.zapps.me/docs/create-bot/)
+- [Zalo Bot Manager (OA của Zalo)](https://zalo.me/3899658094114941620)
+- [OpenClaw — kênh Zalo](https://docs.openclaw.ai/channels/zalo)

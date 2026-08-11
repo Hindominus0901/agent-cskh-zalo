@@ -127,8 +127,11 @@ Chỉ khi bot trả lời được ít nhất 4/5 câu mới đi tiếp.
 
 Chỉ hỏi sau khi B5 đạt. Muốn thì mở `docs/01-noi-zalo.md` và đi từng bước cùng họ.
 
-Chưa có Zalo OA (duyệt mất khoảng một ngày) thì cứ dùng `agent-cskh chat` trong
-lúc chờ — kho tri thức xây bây giờ dùng lại được y nguyên.
+Tạo bot trên Zalo chỉ mất khoảng 5 phút và **không phải chờ duyệt** — làm ngay
+trong app Zalo qua OA *Zalo Bot Manager*, bằng tài khoản cá nhân.
+
+**Đừng bảo họ đi đăng ký OA doanh nghiệp.** Đó là một sản phẩm khác của Zalo,
+tốn cả ngày chờ duyệt và không cần cho template này.
 
 ---
 

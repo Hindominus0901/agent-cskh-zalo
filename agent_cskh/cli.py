@@ -5,10 +5,10 @@
     agent-cskh chay    chay bot that tren Zalo
 
 `chat` la lenh quan trong nhat cua template nay. Nguoi vua nhan repo chua co
-Zalo OA (duyet mat mot ngay) va chua chac co API key. Neu buoc dau tien cua ho
-la "di xin token" thi phan lon se dung lai o do. Voi `chat` + che do `tra_cuu`,
-buoc dau tien la thay bot tra loi — trong vong vai phut, bang chinh kho tri thuc
-cua ho.
+token Zalo va chua chac co API key. Neu buoc dau tien cua ho la "di lay token"
+thi mot phan se dung lai o do. Voi `chat` + che do `tra_cuu`, buoc dau tien la
+thay bot tra loi — trong vong vai phut, bang chinh kho tri thuc cua ho, khong
+ton mot dong nao.
 """
 
 from __future__ import annotations
@@ -275,7 +275,7 @@ def _check() -> int:
     if not s.token:
         xanh.append("  [ ]     Chưa nối Zalo — chạy `agent-cskh chat` để thử trước")
     elif ":" not in s.token:
-        loi("ZALO_BOT_TOKEN sai định dạng", "phải có dạng <id>:<secret>, lấy tại zalo.me/s/botcreator")
+        loi("ZALO_BOT_TOKEN sai định dạng", "phải có dạng <số>:<chuỗi> — Zalo nhắn tin cho bạn, xem docs/01-noi-zalo.md")
     else:
         ok("ZALO_BOT_TOKEN có định dạng đúng")
         if not s.owner_user_ids:

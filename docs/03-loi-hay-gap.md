@@ -51,7 +51,7 @@ Token sai. Kiểm theo thứ tự:
 1. Token có dấu hai chấm `:` ở giữa không? Đúng dạng: `1234567890:AbCdEf...`
 2. Có dấu cách thừa ở đầu hoặc cuối không?
 3. Có lỡ để dấu ngoặc kép không? `.env` **không dùng** dấu ngoặc kép.
-4. Đã cấp lại token ở https://zalo.me/s/botcreator/ mà quên cập nhật?
+4. Đã thu hồi và cấp lại token trong Zalo Bot Creator mà quên cập nhật `.env`?
 
 Sửa `.env` xong phải **tắt bot rồi chạy lại** — file chỉ được đọc lúc khởi động.
 
@@ -148,7 +148,7 @@ khả năng là **hạ tầng Zalo đang có sự cố**, không phải máy b�
 Đã từng xảy ra: ngày 05/08/2026, `getUpdates` chết khoảng 2 tiếng trên mọi bot rồi
 tự hồi phục.
 
-Cách kiểm nhanh: tạo một bot thứ hai ở botcreator với token mới, chạy thử. Cùng
+Cách kiểm nhanh: tạo một bot thứ hai trong Zalo Bot Creator với token mới, chạy thử. Cùng
 lỗi → không phải do bạn. Cứ chờ.
 
 ---

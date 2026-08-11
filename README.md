@@ -36,7 +36,9 @@ uv run agent-cskh chat
 
 Gõ vài câu như một khách hàng. Chưa cần Zalo, chưa cần trả tiền gì cả.
 
-Muốn đưa lên Zalo thật thì mở [docs/01-noi-zalo.md](docs/01-noi-zalo.md).
+Muốn đưa lên Zalo thật thì mở [docs/01-noi-zalo.md](docs/01-noi-zalo.md) — tạo bot
+bằng **Zalo Bot Creator**, mất khoảng 5 phút, **không cần OA doanh nghiệp và
+không phải chờ duyệt**.
 
 ---
 

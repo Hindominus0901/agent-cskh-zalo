@@ -32,10 +32,17 @@ lướt qua**.
 
 **2. Hỏi trước hai câu kỹ thuật để rẽ nhánh.**
 
-> **0a.** Anh/chị đã có Zalo OA chưa ạ?
+> **0a.** Anh/chị đã tạo bot trên Zalo chưa ạ?
 
-Chưa có → nói luôn: duyệt mất khoảng một ngày, nhưng không sao, mình vẫn dựng và
-thử được ngay bây giờ bằng `agent-cskh chat`.
+Chưa có → nói luôn cho họ yên tâm: **chỉ mất khoảng 5 phút và không phải chờ
+duyệt gì cả**. Tạo ngay trong app Zalo, tìm OA *Zalo Bot Manager* rồi chọn
+"Tạo bot" — dùng tài khoản Zalo cá nhân là được, **không cần OA doanh nghiệp**.
+
+Đừng để họ đi xin OA doanh nghiệp: đó là một sản phẩm khác, tốn cả ngày chờ duyệt
+và không cần cho template này. Xem `docs/01-noi-zalo.md`.
+
+Dù sao thì cũng chưa cần token ngay bây giờ — cứ dựng kho tri thức và thử bằng
+`agent-cskh chat` trước.
 
 > **0b.** Mình chạy bản miễn phí trước, hay anh/chị muốn dùng bản AI luôn (tốn
 > khoảng 60.000đ/tháng tiền API, cần thẻ quốc tế)?
