@@ -75,7 +75,10 @@ uv sync
 uv run pytest -q
 ```
 
-Test phải xanh hết (khoảng 340 test). **Đỏ thì dừng lại và báo** — đừng sửa bừa.
+Test phải **xanh hết** — dòng cuối không được có chữ `failed`. Đừng đếm số
+test, con số đó đổi mỗi lần ai thêm test.
+
+**Đỏ thì dừng lại và báo** — đừng sửa bừa.
 Test đỏ ở đây nghĩa là môi trường có vấn đề, không phải template có vấn đề.
 
 ### B2 — Phỏng vấn

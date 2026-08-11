@@ -47,16 +47,16 @@ sudo usermod -aG docker $USER
 ### 2. Đưa mã nguồn lên
 
 ```bash
-git clone <repo-cua-ban> /opt/zalo-agent
-cd /opt/zalo-agent
+git clone <repo-cua-ban> /opt/agent-cskh
+cd /opt/agent-cskh
 ```
 
 Chưa đẩy lên Git thì nén từ máy Windows rồi chép sang:
 
 ```powershell
 # Trên máy Windows — KHÔNG kèm .env, data, secrets
-tar -czf zalo-agent.tar.gz --exclude=.venv --exclude=data --exclude=.env --exclude=secrets .
-scp zalo-agent.tar.gz user@vps:/opt/
+tar -czf agent-cskh.tar.gz --exclude=.venv --exclude=data --exclude=.env --exclude=secrets .
+scp agent-cskh.tar.gz user@vps:/opt/
 ```
 
 ### 3. Tạo `.env` trên VPS
@@ -78,7 +78,7 @@ chmod 600 .env
 ### 4. Chép kho tri thức lên
 
 ```powershell
-scp -r "C:\ZALO BOT\knowledge" user@vps:/opt/zalo-agent/
+scp -r knowledge user@vps:/opt/agent-cskh/
 ```
 
 Không chép `data/` — để bot tự tạo CSDL mới. Muốn giữ lịch sử hội thoại và lead cũ
@@ -113,7 +113,7 @@ trần 60 MB (10 MB × 6 file), và toàn bộ venv chỉ 81 MB.
 
 ## Chuyển sang webhook
 
-**Ở 50 học viên thì chưa cần.** Polling không mở cổng nào ra internet — bề mặt
+**Ở mức 50 khách/tháng — trần của gói Basic — thì chưa cần.** Polling không mở cổng nào ra internet — bề mặt
 tấn công từ ngoài bằng 0 — và webhook chỉ nhanh hơn 1–2 giây. Đọc mục này khi
 thật sự cần độ trễ thấp, đừng làm vì nó "chuyên nghiệp hơn".
 
@@ -231,21 +231,16 @@ curl https://bot.tenmiencuaban.com/health
 | Cập nhật mã | `git pull && docker compose up -d --build` |
 | Sửa kho tri thức | Sửa file trong `knowledge/` rồi nhắn `/nap` cho bot |
 | Sao lưu | `docker compose exec bot python scripts/sao_luu.py` |
-| Bảng theo dõi lớp | `data/bao_cao/tien-do.html` — sinh lại mỗi tối 20:00 |
+| Xem báo cáo | Nhắn `/baocao` cho bot, hoặc đợi báo cáo tự động 20:00 |
 
 Bot tự khởi động lại khi VPS reboot nhờ `restart: unless-stopped`.
 
-### Lấy bảng theo dõi về máy
+### Xem bot còn thiếu gì
 
-File tĩnh, tự chứa, mở bằng trình duyệt nào cũng được:
+Không cần vào VPS. Nhắn **`/baocao`** cho bot ngay trong Zalo — mục *"câu bot
+KHÔNG trả lời được"* là danh sách trang cần viết thêm, đã gom theo số người hỏi.
 
-```bash
-scp user@vps:/opt/zalo-agent/data/bao_cao/tien-do.html .
-```
-
-**Đừng đặt nó sau một đường dẫn web công khai.** Nó chứa họ tên và tiến độ của
-cả lớp. Muốn chia sẻ cho giảng viên thì gửi file, hoặc đặt sau Cloudflare Access
-— chỗ này thì Access dùng được, khác với đường `/webhook`.
+Bot cũng tự gửi báo cáo này lúc 20:00 hằng ngày về kênh cảnh báo.
 
 ### Sao lưu tự động
 
@@ -262,7 +257,7 @@ crontab -e
 ```
 
 ```
-0 2 * * * cd /opt/zalo-agent && docker compose exec -T bot python scripts/sao_luu.py >> data/logs/sao-luu.log 2>&1
+0 2 * * * cd /opt/agent-cskh && docker compose exec -T bot python scripts/sao_luu.py >> data/logs/sao-luu.log 2>&1
 ```
 
 Kho tri thức đã nằm trong git nên không cần sao lưu riêng — nhưng **repo phải là

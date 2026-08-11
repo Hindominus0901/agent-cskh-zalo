@@ -60,8 +60,8 @@ Lần đầu mất khoảng 1–2 phút. Nó tự tải Python 3.12 nếu máy c
 uv run pytest -q
 ```
 
-Phải thấy khoảng **355 test xanh**. Có test đỏ thì đừng đi tiếp — báo lại, đừng
-sửa bừa.
+Dòng cuối phải là **`... passed`**, không có chữ `failed`. Có test đỏ thì đừng đi
+tiếp — báo lại, đừng sửa bừa.
 
 ```bash
 uv run agent-cskh check
