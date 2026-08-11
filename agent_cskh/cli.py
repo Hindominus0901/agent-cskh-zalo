@@ -20,6 +20,36 @@ import sys
 MAC = platform.system() == "Darwin"
 
 
+def _bat_utf8() -> None:
+    """Ep console sang UTF-8 truoc khi in bat cu thu gi.
+
+    MOI chuoi nguoi dung thay trong file nay deu la tieng Viet co dau. Console
+    Windows mac dinh la cp1252, khong ma hoa duoc "ế", "ữ", "ộ" — nen `check` va
+    `chat` CHET bang UnicodeEncodeError truoc khi in noi mot dong.
+
+    Do duoc 11/08/2026 khi dua repo cho mot agent la chay thu tren console sach.
+    Khong phat hien som hon vi console cua may dang phat trien da duoc dat UTF-8
+    tu truoc — dung kieu loi chi hien ra o may nguoi khac.
+
+    Hau qua neu khong sua: hoc vien khong biet lap trinh chay lenh dau tien cua
+    ho va nhan lai mot traceback Python. Ho se khong doc no, ho se bo.
+
+    `errors="replace"` chu khong phai "strict": console co font khong day du van
+    in duoc, chi thay vai ky tu bang "?". Mat dau con hon mat ca chuong trinh.
+
+    Bao boc trong try/except vi:
+      - Tren macOS/Linux thuong da la UTF-8 san, goi nay vo hai
+      - Trong test, stdout co the la StringIO — khong co `reconfigure`
+    """
+    for luong in (sys.stdout, sys.stderr, sys.stdin):
+        try:
+            luong.reconfigure(encoding="utf-8", errors="replace")  # type: ignore[union-attr]
+        except (AttributeError, ValueError, OSError):
+            # Khong ep duoc thi thoi — khong duoc lam hong ca chuong trinh chi
+            # vi khong doi duoc bang ma.
+            pass
+
+
 def _in_dam(s: str) -> str:
     return f"\033[1m{s}\033[0m" if sys.stdout.isatty() else s
 
@@ -54,7 +84,7 @@ def _chat() -> int:
         print()
         print("  Kho đang TRỐNG nên bot chưa trả lời được gì.")
         print("  Thêm trang vào knowledge/wiki/public/ rồi chạy lại.")
-        print("  Chưa có nội dung thì đọc CLAUDE.md — phần phỏng vấn.")
+        print("  Chưa có nội dung thì đọc HUONG-DAN-AGENT.md — phần phỏng vấn.")
     print()
     print("  Gõ câu hỏi như một khách hàng. Ctrl+C để thoát.")
     print("  Đổi vai: /vai stranger | /vai student | /vai staff")
@@ -172,7 +202,7 @@ def _check() -> int:
     # --- persona ---
     persona = s.knowledge_dir / "persona.md"
     if not persona.exists():
-        loi("Chưa có knowledge/persona.md", "đọc CLAUDE.md — phần phỏng vấn")
+        loi("Chưa có knowledge/persona.md", "đọc HUONG-DAN-AGENT.md rồi PHONG-VAN.md")
     else:
         noi_dung = persona.read_text(encoding="utf-8")
         # Dem `[CHỜ HỌC VIÊN:` CO DAU HAI CHAM, khong dem `[CHỜ HỌC VIÊN]`.
@@ -291,6 +321,8 @@ async def _chay() -> int:
 
 
 def main() -> int:
+    # PHAI goi truoc moi lenh print. Xem docstring cua `_bat_utf8`.
+    _bat_utf8()
     lenh = sys.argv[1] if len(sys.argv) > 1 else "help"
     if lenh == "chat":
         return _chat()

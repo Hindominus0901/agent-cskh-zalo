@@ -5,7 +5,7 @@ trên Zalo bằng đúng thông tin của bạn, và biết im lặng chuyển c
 nó không chắc.
 
 **Bạn không cần biết lập trình.** Đưa link repo này cho một coding agent (Claude
-Code, Cursor), nó sẽ đọc `CLAUDE.md`, phỏng vấn bạn, rồi dựng xong.
+Code, Cursor, Codex), nó sẽ đọc `HUONG-DAN-AGENT.md`, phỏng vấn bạn, rồi dựng xong.
 
 ---
 
@@ -17,9 +17,12 @@ Code, Cursor), nó sẽ đọc `CLAUDE.md`, phỏng vấn bạn, rồi dựng xo
 git clone <link-repo-cua-ban>
 ```
 
-**2. Mở thư mục vừa tải bằng Claude Code (hoặc Cursor), rồi gõ đúng câu này:**
+**2. Mở thư mục vừa tải bằng Claude Code, Codex hoặc Cursor, rồi gõ đúng câu này:**
 
-> Đọc CLAUDE.md và dựng bot cho tôi.
+> Đọc HUONG-DAN-AGENT.md và dựng bot cho tôi.
+
+Dùng công cụ nào cũng được — cả ba đều dẫn về cùng một hướng dẫn. Chi tiết cho
+từng công cụ: [docs/00-cai-dat.md](docs/00-cai-dat.md).
 
 Nó sẽ hỏi bạn khoảng 17 câu về doanh nghiệp — bán gì, khách hay hỏi gì, giá thế
 nào, điều gì bot tuyệt đối không được nói. **Trả lời thật, đừng trả lời cho có:**

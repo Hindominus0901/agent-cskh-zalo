@@ -82,6 +82,53 @@ Không cần token Zalo, không cần API key, không tốn đồng nào.
 
 ---
 
+## Dùng coding agent nào cũng được
+
+Repo này không thiên vị công cụ nào. Mỗi công cụ tự tìm được hướng dẫn theo quy
+ước riêng của nó, và cả ba đều dẫn về **cùng một file**.
+
+| Công cụ | Nó tự đọc file | Câu bạn gõ |
+|---|---|---|
+| Claude Code | `CLAUDE.md` | `Đọc HUONG-DAN-AGENT.md và dựng bot cho tôi.` |
+| Codex | `AGENTS.md` | như trên |
+| Cursor | `AGENTS.md` | như trên |
+
+Nội dung thật nằm ở `HUONG-DAN-AGENT.md`, kịch bản phỏng vấn ở `PHONG-VAN.md` —
+cả hai đều ở gốc repo. **Không có gì bị giấu trong `.claude/`.**
+
+### Riêng cho Codex
+
+Cài (cần Node.js):
+
+```bash
+npm install -g @openai/codex
+```
+
+Rồi vào thư mục repo và chạy `codex`.
+
+Ba điều nên biết trước:
+
+**Nó sẽ xin phép liên tục.** Codex mặc định hỏi trước mỗi lần ghi file hay chạy
+lệnh. Dựng bot cần ghi kha khá file, nên bạn sẽ bấm đồng ý nhiều lần — đó là bình
+thường, không phải nó bị lỗi. Muốn đỡ phiền thì chọn chế độ cho phép ghi trong
+thư mục làm việc ngay từ đầu.
+
+**Đừng cho nó quyền chạy mọi thứ không hỏi.** Cám dỗ là bật chế độ tự động hoàn
+toàn cho nhanh. Đừng — bước phỏng vấn *cần* nó dừng lại hỏi bạn, đó là cả điểm
+mấu chốt.
+
+**Nó không tự thấy `PHONG-VAN.md`.** Khác Claude Code, Codex không quét thư mục
+skill. Nó phải đọc `AGENTS.md` → `HUONG-DAN-AGENT.md` → rồi mới tới `PHONG-VAN.md`.
+Thấy nó bỏ qua bước phỏng vấn thì nhắc thẳng:
+
+> Đọc PHONG-VAN.md rồi hỏi tôi từng câu một.
+
+> **Chưa kiểm chứng:** phần Codex ở trên viết theo cách Codex đọc `AGENTS.md`,
+> nhưng **chưa có ai chạy thử thật** một lần nào từ đầu đến cuối. Bạn là người
+> đầu tiên thì gặp gì lệch, sửa lại giúp file này.
+
+---
+
 ## Bảng đối chiếu lệnh
 
 | Việc | Windows | macOS |

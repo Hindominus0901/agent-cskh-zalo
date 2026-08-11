@@ -3,7 +3,7 @@
 Viết cho người chưa từng làm. Làm đúng thứ tự, đừng nhảy bước.
 
 **Trước khi bắt đầu:** bot phải chạy được trong terminal đã. Chưa chạy được
-`uv run agent-cskh chat` thì quay lại `CLAUDE.md` — nối Zalo không sửa được vấn
+`uv run agent-cskh chat` thì quay lại `HUONG-DAN-AGENT.md` — nối Zalo không sửa được vấn
 đề của kho tri thức.
 
 Tổng thời gian: khoảng 30 phút, **cộng thêm ~1 ngày chờ Zalo duyệt OA** ở bước 1.

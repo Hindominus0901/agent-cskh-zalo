@@ -60,6 +60,11 @@ ignore = ["E501", "S101"]
 "tests/conftest.py" = ["ASYNC109"]
 # Client gia phai khop chu ky cua ZaloClient.get_updates, ke ca tham so `timeout`.
 "tests/test_polling.py" = ["ASYNC109"]
+# S603: test nay BAT BUOC phai chay CLI trong mot tien trinh that, vi thu no do
+# la bang ma cua console — thu chi ton tai o tien trinh con. Dau vao la hang so
+# viet thang trong test (`sys.executable` + chuoi co dinh), khong co gi tu ngoai
+# vao.
+"tests/test_cli.py" = ["S603"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
