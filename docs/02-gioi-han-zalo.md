@@ -88,10 +88,25 @@ không bao giờ tới được khách. `scripts/wiki_index.py` sẽ cảnh báo
 
 ---
 
-## 6. Trong nhóm, bot chỉ nghe khi được @mention
+## 6. Nhóm chat: được 3 nhóm, và bot chỉ nghe khi được gọi
 
-Hoặc khi có người quote-reply tin của bot. Điều này đúng ra là tốt: bot không đọc
-toàn bộ chat nhóm.
+**Đây thật ra là điểm MẠNH nhất của Bot Creator, không phải giới hạn** — Zalo OA
+không vào được nhóm chat, chỉ Bot Creator vào được.
+
+Cách thêm: mở mini app **Zalo Bot Creator**, chọn bot, thêm vào nhóm.
+
+Trong nhóm, bot chỉ nghe khi được **@mention** hoặc khi có người **trả lời trực
+tiếp** tin của bot. Nó không đọc toàn bộ chat nhóm — vừa riêng tư hơn, vừa đỡ tốn
+hạn mức.
+
+Hợp với: lớp học, cộng đồng, nhóm khách VIP, nhóm nội bộ — chỗ cần một trợ lý
+ngồi sẵn trả lời câu lặp đi lặp lại.
+
+Giới hạn thật: **3 nhóm** ở gói Basic, và tính năng nhóm đang ở giai đoạn **beta**.
+
+> ⚠️ Bot trong nhóm đọc được câu của mọi thành viên khi bị @mention. Đừng thêm bot
+> vào nhóm mà bạn không muốn nó ghi lại nội dung — mọi câu hỏi nó không trả lời
+> được đều được lưu vào báo cáo.
 
 ---
 

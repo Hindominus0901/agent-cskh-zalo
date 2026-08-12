@@ -34,37 +34,81 @@ nhiều người hiểu nhầm rằng OA chỉ là "phiên bản phiền hơn":
 
 | Năng lực | Bot Creator | Zalo OA |
 |---|:---:|:---:|
-| Trả lời tin nhắn khách | ✅ | ✅ |
+| Trả lời tin nhắn khách 1-1 | ✅ | ✅ |
 | Nhận và xem ảnh | ✅ | ✅ |
+| **Vào được NHÓM CHAT** | ✅ (3 nhóm, beta) | ❌ |
 | **Nút bấm, menu, tin nhắn có thẻ** | ❌ | ✅ |
-| **Nhắn chủ động cho khách** (ZNS: xác nhận đơn, nhắc lịch) | ❌ | ✅ |
-| **Nhắn cho người chưa từng nhắn mình** | ❌ | ✅ |
+| **Nhắn chủ động ra số điện thoại** (ZNS) | ❌ | ✅ *(có điều kiện)* |
 | Gửi/nhận file tài liệu | ❌ | ✅ |
 | Hạn mức tin nhắn | 3.000/tháng | Theo gói, cao hơn nhiều |
 | Số người dùng | 50 | Không giới hạn như vậy |
 | Gắn mini app, form, thanh toán | ❌ | ✅ |
 
-Nói cách khác: **phần lớn giới hạn trong
-[`02-gioi-han-zalo.md`](02-gioi-han-zalo.md) là hệ quả của việc chọn Bot Creator**,
-không phải giới hạn của Zalo nói chung.
+**Không phải OA hơn ở mọi mặt.** Có một việc Bot Creator làm được mà OA thì không:
+
+### Bot Creator vào được nhóm chat, OA thì không
+
+OA là kênh **1-1 và phát tin cho người quan tâm** — nó không tham gia nhóm chat.
+Bot Creator thì thêm vào nhóm được: mở mini app Zalo Bot Creator, chọn bot, rồi
+thêm vào nhóm. Trong nhóm bot chỉ nghe khi được **@mention** hoặc khi có người
+**trả lời trực tiếp** tin của bot — nên nó không đọc toàn bộ chat nhóm.
+
+Đây là lý do Bot Creator hợp hẳn với **lớp học, cộng đồng, nhóm khách VIP, nhóm
+nội bộ** — những chỗ cần một trợ lý ngồi sẵn trong nhóm trả lời câu lặp đi lặp lại.
+
+*(Giới hạn 3 nhóm là của gói Basic, và tính năng nhóm đang ở giai đoạn beta.)*
+
+Nói cách khác: phần lớn giới hạn trong
+[`02-gioi-han-zalo.md`](02-gioi-han-zalo.md) là hệ quả của việc chọn Bot Creator —
+nhưng đổi lại bạn được thứ OA không có.
 
 ### Khi nào bạn buộc phải lên OA
 
 Bốn dấu hiệu. Gặp một trong số đó thì Bot Creator không đủ nữa:
 
-1. **Cần nhắn chủ động** — xác nhận đơn, nhắc lịch hẹn, báo hàng đã giao. Bot
-   Creator không lấy được `chat_id` từ số điện thoại, nên **không nhắn trước cho
-   ai được**, kể cả khách đã mua.
+1. **Cần nhắn chủ động ra số điện thoại** — xác nhận đơn, nhắc lịch hẹn, báo hàng
+   đã giao. Bot Creator không lấy được `chat_id` từ số điện thoại, nên **không
+   nhắn trước cho ai được**, kể cả khách đã mua.
 2. **Vượt 3.000 tin/tháng** — khoảng 300 cuộc trò chuyện, tức 10 cuộc/ngày.
 3. **Quá 50 người dùng.**
 4. **Cần nút bấm** — đặt lịch, chọn món, xác nhận đơn bằng một chạm.
 
-Chưa gặp dấu hiệu nào thì **đừng lên OA vội**. Nó tốn giấy tờ, tốn thời gian
-duyệt, và bạn sẽ phải viết lại lớp kênh (`agent_cskh/transport/`) vì OA dùng API
-khác hẳn — `openapi.zalo.me` thay vì `bot-api.zaloplatforms.com`.
+### ZNS không phải là kênh nhắn tin lạnh
 
-Kho tri thức, persona, kỹ năng của bạn **giữ nguyên** khi chuyển. Chỉ lớp nối
-Zalo phải làm lại.
+Đây là chỗ dễ kỳ vọng nhầm nhất, nên nói rõ.
+
+ZNS **gửi được tới số điện thoại của cả người chưa quan tâm OA** — đúng. Nhưng
+Zalo ràng ba điều kiện:
+
+- Người đó phải **đã có quan hệ với doanh nghiệp** và **tự cung cấp số điện thoại**
+- Tin chỉ được gửi khi **có giao dịch** hoặc **có thay đổi trong quan hệ** đó
+  (đặt hàng, giao hàng, đổi lịch, hết hạn dịch vụ…)
+- Mỗi mẫu tin phải được **Zalo duyệt trước**
+
+Nghĩa là ZNS dành cho tin **giao dịch và chăm sóc**, không phải để chào hàng tới
+một danh sách số lạ. Mua một file số điện thoại rồi bắn tin bán hàng **không phải
+là thứ ZNS cho phép**.
+
+Muốn tiếp cận người hoàn toàn chưa biết mình thì đó là việc của quảng cáo, không
+phải của bot.
+
+### Chuyển sang OA tốn gì
+
+Nó tốn giấy tờ, tốn thời gian duyệt, và bạn sẽ phải **viết lại lớp kênh**
+(`agent_cskh/transport/`) vì OA dùng API khác hẳn — `openapi.zalo.me` thay vì
+`bot-api.zaloplatforms.com`. Và bạn **mất khả năng vào nhóm chat**.
+
+Kho tri thức, persona, kỹ năng của bạn **giữ nguyên**. Chỉ lớp nối Zalo phải làm lại.
+
+Nhiều nơi chạy **cả hai**: Bot Creator trong nhóm và cho khách nhắn tới, OA cho
+tin giao dịch gửi ra.
+
+---
+
+*Nguồn cho mục này: [tài liệu Zalo Bot — tương tác với nhóm](https://docs.zaloplatforms.com/docs/BOT/best-practices/build-bot-interaction-with-group)
+· [Zalo Notification Service](https://oa.zalo.me/home/documents/guides/zalo-notification-service_9187280180949502968).
+Hạn mức 3.000 tin / 50 người / 3 nhóm là đo được từ một bot Basic đang chạy thật,
+không phải từ tài liệu chính thức — Zalo có thể đã đổi.*
 
 ---
 

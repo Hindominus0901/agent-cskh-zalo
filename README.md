@@ -149,6 +149,8 @@ Chạy có tự khởi động lại: `.\run.ps1` (Windows) · `./run.sh` (macOS
   lâu dài cần VPS.
 - Zalo **không gửi/nhận được file tài liệu**. Khách gửi PDF thì bot không đọc được.
 - Không có nút bấm. Tin nhắn tối đa 2.000 ký tự.
+- **Bot vào được nhóm chat** (3 nhóm, beta) — đây là thứ Zalo OA doanh nghiệp
+  KHÔNG làm được, và là lý do Bot Creator hợp với lớp học và cộng đồng.
 
 ---
 
