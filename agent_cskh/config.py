@@ -53,6 +53,27 @@ class Settings(BaseSettings):
     claude_model: str = "claude-sonnet-5"
     daily_cost_limit_usd: float = 2.0
 
+    # ---------- Kenh web (widget tren website) ----------
+    web_port: int = 8080
+    # Mac dinh CHI nghe o may nay. Doi thanh "0.0.0.0" khi da co reverse proxy
+    # (nginx/Caddy) dung truoc lo HTTPS — phoi thang cong 8080 ra internet nghia
+    # la chay HTTP khong ma hoa, va cookie phien di qua duong khong ma hoa do.
+    web_host: str = "127.0.0.1"
+    # Ten mien duoc phep nhung widget. RONG = chan het (tru localhost khi thu).
+    #
+    # Khong de mac dinh "*": mo CORS cho ca internet nghia la bat ky trang nao
+    # cung nhung duoc widget cua ban roi tinh phi API vao tai khoan chu shop.
+    # Bat buoc khai bao la mot rao can nho, nhung no chan dung kieu tai nan hay
+    # xay ra nhat — quen mat mot dong cau hinh.
+    web_origins: Annotated[list[str], NoDecode] = Field(default_factory=list)
+    # Tran cung: tong so luot khach web moi NGAY, ca site. Cham tran thi bot
+    # ngung phuc vu web den ngay hom sau — Zalo van chay binh thuong.
+    web_tran_ngay: int = 500
+    # Nhip toi da moi IP moi phut. Chat that cua nguoi that hiem khi qua 6.
+    web_nhip_ip_moi_phut: int = 10
+    # Thoi gian toi da cho mot luot tra loi truoc khi tra ve cau xin loi.
+    web_cho_giay: int = 90
+
     # ---------- Quyen ----------
     # NoDecode: khong de pydantic-settings thu json.loads truoc validator ben duoi.
     owner_user_ids: Annotated[list[str], NoDecode] = Field(default_factory=list)
@@ -111,12 +132,26 @@ class Settings(BaseSettings):
     def fixtures_dir(self) -> Path:
         return ROOT / "tests" / "fixtures" / "updates"
 
-    @field_validator("owner_user_ids", mode="before")
+    @field_validator("owner_user_ids", "web_origins", mode="before")
     @classmethod
     def _split_ids(cls, v: object) -> object:
         if isinstance(v, str):
             return [x.strip() for x in v.split(",") if x.strip()]
         return v
+
+    @field_validator("web_origins")
+    @classmethod
+    def _chuan_hoa_origin(cls, v: list[str]) -> list[str]:
+        """Bo dau `/` cuoi va khoang trang.
+
+        Trinh duyet gui header `Origin: https://shop.com` — KHONG BAO GIO co dau
+        `/` o cuoi. Nen khai `WEB_ORIGINS=https://shop.com/` la khong khop gi ca,
+        va widget bi chan voi loi CORS kho hieu trong console trinh duyet.
+
+        Day dung kieu loi mot nguoi khong biet lap trinh se khong bao gio tu tim
+        ra, nen sua o day thay vi bao loi.
+        """
+        return [x.strip().rstrip("/") for x in v if x.strip()]
 
     @field_validator("max_reply_chars")
     @classmethod

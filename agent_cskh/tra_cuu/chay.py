@@ -28,7 +28,7 @@ te hon han viec bot noi thang "em khong biet".
 
 from __future__ import annotations
 
-from agent_cskh.harness.ban_giao import mo_ban_giao
+from agent_cskh.harness.ban_giao import mo_ban_giao, them_xin_lien_lac
 from agent_cskh.harness.turn import TurnContext
 from agent_cskh.logging_setup import get_logger
 from agent_cskh.tra_cuu.dinh_tuyen import DinhTuyenTraCuu
@@ -90,14 +90,18 @@ class VongTraCuu:
             except Exception as e:  # noqa: BLE001 - khong duoc lam hong luot
                 log.warning("khong_ghi_duoc_thieu_trang", error=str(e))
 
+        text = kq.text
         if kq.can_nguoi_that:
             await self._chuyen_nguoi(
                 ctx,
                 ly_do="ngoai_pham_vi",
                 tom_tat=f"Kho tri thức chưa có câu trả lời.\nKhách hỏi: {kq.cau_hoi_thieu or ''}",
             )
+            # Tren web phai xin duong lien lac: khach dong tab la khong con cach
+            # nao nhan toi ho nua. Xem `harness/ban_giao.py`.
+            text = them_xin_lien_lac(ctx.event.chat_id, text)
 
-        await ctx.reply(kq.text)
+        await ctx.reply(text)
 
     async def _chuyen_nguoi(self, ctx: TurnContext, *, ly_do: str, tom_tat: str) -> None:
         """Dung CHUNG duong ban giao voi che do `ai`.

@@ -128,12 +128,34 @@ thống — và nó chạy ở cả hai chế độ.
 uv run agent-cskh chat     # chat thử trong terminal
 uv run agent-cskh check    # kiểm tra còn thiếu gì
 uv run agent-cskh chay     # chạy thật trên Zalo
+uv run agent-cskh web      # widget chat cho website
 ```
 
 Chạy có tự khởi động lại: `.\run.ps1` (Windows) · `./run.sh` (macOS)
 
 **Không có lệnh nào cả.** Trong Zalo bạn cứ nói bằng lời: *“báo cáo hôm nay”*,
 *“id của tôi”*, *“nạp lại kho”*, *“thêm trang công khai bang-gia”*, *“tôi nhận chat này”*.
+
+---
+
+## Nhúng lên website
+
+Cùng con bot đó, ngồi ở góc phải trang web của bạn — khách không cần có Zalo:
+
+```bash
+uv run agent-cskh web
+```
+
+Rồi dán một dòng vào trang của bạn:
+
+```html
+<script src="https://bot.tenmiencuaban.com/widget.js" defer></script>
+```
+
+Chạy được **cả hai kênh cùng lúc**, chung một kho tri thức. Nhưng web mở thẳng ra
+internet nên rủi ro khác hẳn Zalo — đọc
+[docs/08-nhung-len-website.md](docs/08-nhung-len-website.md) trước, nhất là mục
+chọn chế độ và ba lớp chặn lạm dụng.
 
 ---
 

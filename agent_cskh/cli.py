@@ -3,6 +3,7 @@
     agent-cskh chat    chat ngay trong terminal — KHONG can token, khong can key
     agent-cskh check   kiem tra cau hinh, in ra dung viec can lam tiep
     agent-cskh chay    chay bot that tren Zalo
+    agent-cskh web     chay widget chat cho website/landing page
 
 `chat` la lenh quan trong nhat cua template nay. Nguoi vua nhan repo chua co
 token Zalo va chua chac co API key. Neu buoc dau tien cua ho la "di lay token"
@@ -365,6 +366,11 @@ def main() -> int:
         return _check()
     if lenh in ("chay", "run"):
         return asyncio.run(_chay())
+    if lenh == "web":
+        from agent_cskh.config import get_settings
+        from agent_cskh.web.chay import chay_web
+
+        return asyncio.run(chay_web(get_settings()))
     print(__doc__)
     return 0 if lenh in ("help", "-h", "--help") else 1
 

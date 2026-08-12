@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from agent_cskh.harness.ban_giao import LY_DO, MSG_DA_CHUYEN, mo_ban_giao
+from agent_cskh.harness.ban_giao import LY_DO, MSG_DA_CHUYEN, loi_da_chuyen, mo_ban_giao
 from agent_cskh.logging_setup import get_logger
 from agent_cskh.tools.base import Tool
 
@@ -66,7 +66,7 @@ async def _chuyen_nguoi_that(ctx: TurnContext, args: dict[str, Any]) -> str:
         )
     return (
         "Đã chuyển cho người phụ trách và gửi tóm tắt thành công. "
-        f"Bây giờ hãy nói với khách đúng ý này rồi dừng lại: «{MSG_DA_CHUYEN}»"
+        f"Bây giờ hãy nói với khách đúng ý này rồi dừng lại: «{loi_da_chuyen(ctx.event.chat_id)}»"
     )
 
 

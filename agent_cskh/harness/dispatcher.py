@@ -99,21 +99,38 @@ class TurnDispatcher:
         self._commands = command_handler
         self._xac_nhan = CongXacNhan()
 
+        # Kenh doi-dap (web) cho o day: event_id -> co bao "luot nay xong roi".
+        self._xong: dict[str, asyncio.Event] = {}
         self._queues: dict[str, asyncio.Queue[InboundEvent]] = {}
         self._workers: dict[str, asyncio.Task[None]] = {}
         self._sem = asyncio.Semaphore(settings.max_concurrent_turns)
         self._running = True
 
     # ---------- vao ----------
-    async def submit(self, event: InboundEvent) -> None:
-        """Loc va dua vao hang doi. Moi buoc tu choi deu ghi log ro ly do."""
+    async def submit(self, event: InboundEvent, xong: asyncio.Event | None = None) -> None:
+        """Loc va dua vao hang doi. Moi buoc tu choi deu ghi log ro ly do.
+
+        `xong` danh cho kenh doi-dap (web): Zalo la mot chieu — day tin di roi
+        thoi — nhung HTTP phai biet KHI NAO luot xu ly xong de con tra ve cho
+        trinh duyet. Bat buoc moi duong ra deu bat co nay len, ke ca duong tu
+        choi, neu khong tang HTTP se treo cho den het thoi gian cho.
+        """
+        da_xep = False
+        try:
+            da_xep = await self._submit(event, xong)
+        finally:
+            if xong is not None and not da_xep:
+                xong.set()
+
+    async def _submit(self, event: InboundEvent, xong: asyncio.Event | None) -> bool:
+        """True = da vao hang doi (worker se bat `xong`). False = dung tai day."""
         if not self._running:
-            return
+            return False
 
         # 1. Dedup — Zalo giao at-most-once nhung ta khong tin tuyet doi.
         if await self._repo.already_processed(event.event_id):
             log.debug("bo_qua_trung_lap", message_id=event.event_id[:12])
-            return
+            return False
         await self._repo.mark_processed(event.event_id, event.chat_id)
         await self._quota.count_received(1)
 
@@ -125,12 +142,12 @@ class TurnDispatcher:
         if not await self._quota.allows(is_internal=principal.at_least("staff")):
             if not principal.at_least("staff"):
                 await self._reply_raw(event.chat_id, MSG_HET_QUOTA)
-            return
+            return False
 
         # 4. Rate limit theo nguoi
         if not await self._limiter.allow(event.user_id):
             await self._reply_raw(event.chat_id, errors.MSG_QUA_NHANH)
-            return
+            return False
 
         # 5. Dang co nguoi that tiep quan -> bot im lang tuyet doi
         state = await self._repo.get_state(event.chat_id)
@@ -138,7 +155,7 @@ class TurnDispatcher:
             session_id = await self._repo.ensure_conversation(event)
             await self._repo.save_inbound(event, session_id)
             log.info("im_lang_vi_handoff", chat_id=event.chat_id[:8])
-            return
+            return False
 
         # 6. Ghi lai roi xep hang
         session_id = await self._repo.ensure_conversation(event)
@@ -156,6 +173,11 @@ class TurnDispatcher:
             queue.put_nowait(event)
         except asyncio.QueueFull:
             log.warning("hang_doi_day_bo_tin", chat_id=event.chat_id[:8])
+            return False
+
+        if xong is not None:
+            self._xong[event.event_id] = xong
+        return True
 
     # ---------- worker mot chat ----------
     async def _worker(self, chat_id: str, queue: asyncio.Queue[InboundEvent]) -> None:
@@ -172,6 +194,11 @@ class TurnDispatcher:
             except Exception as e:  # noqa: BLE001 - worker khong duoc chet
                 log.exception("worker_loi", chat_id=chat_id[:8], error=str(e))
             finally:
+                # Bat co TRONG `finally`: luot no loi thi tang HTTP van phai duoc
+                # danh thuc, khong thi tab cua khach quay mai den het thoi gian cho.
+                co = self._xong.pop(event.event_id, None)
+                if co is not None:
+                    co.set()
                 queue.task_done()
 
     async def _handle(self, event: InboundEvent) -> None:

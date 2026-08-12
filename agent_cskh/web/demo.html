@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thử widget CSKH</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+       max-width:680px;margin:60px auto;padding:0 20px;line-height:1.65;color:#111}
+  code,pre{background:#f4f6f8;border-radius:6px}
+  code{padding:2px 6px;font-size:14px}
+  pre{padding:14px;overflow-x:auto;font-size:13px}
+  .nho{color:#666;font-size:14px}
+  hr{border:0;border-top:1px solid #e6e8eb;margin:32px 0}
+</style>
+</head>
+<body>
+
+<h1>Widget CSKH đang chạy</h1>
+
+<p>Bấm bong bóng ở góc dưới bên phải để thử. Đây là <strong>trang thử</strong> —
+widget thật sẽ nằm trên website của bạn.</p>
+
+<hr>
+
+<h2>Nhúng vào website của bạn</h2>
+
+<p>Dán đúng một dòng này vào trước thẻ <code>&lt;/body&gt;</code>:</p>
+
+<pre id="nhung"></pre>
+
+<p class="nho">Tuỳ biến bằng thuộc tính <code>data-</code>:
+<code>data-ten</code>, <code>data-mau</code>, <code>data-chao</code>,
+<code>data-goc="trai"</code>.</p>
+
+<h2>Trước khi dán lên trang thật</h2>
+
+<p>Khai báo tên miền của bạn vào <code>WEB_ORIGINS</code> trong <code>.env</code>,
+nếu không trình duyệt sẽ chặn:</p>
+
+<pre>WEB_ORIGINS=https://tenmiencuaban.com,https://www.tenmiencuaban.com</pre>
+
+<p class="nho">Chi tiết ở <code>docs/08-nhung-len-website.md</code>.</p>
+
+<script>
+  document.getElementById('nhung').textContent =
+    '<script src="' + location.origin + '/widget.js" data-ten="Trợ lý" defer><\/script>';
+</script>
+<script src="/widget.js" data-ten="Trợ lý" defer></script>
+
+</body>
+</html>

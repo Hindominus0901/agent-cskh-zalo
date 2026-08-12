@@ -41,6 +41,41 @@ MSG_DA_CHUYEN = (
     "Mình chờ giúp em trong giờ làm việc nhé."
 )
 
+# Tren WEB, cau tren la mot LOI HUA KHONG GIU DUOC.
+#
+# Zalo co cuoc tro chuyen ton tai lau dai: tu van vien nhan lai duoc, va khach
+# thay tin do ke ca vai tieng sau. Khach web thi dong tab la bien mat — khong co
+# `chat_id` nao de nhan toi, khong co hop thu nao de tin nam cho. Bao khach "minh
+# cho giup em" o day la hen mot cuoc hen khong ai den duoc.
+#
+# Nen o web ta doi huong: xin mot duong lien lac THAT (so dien thoai hoac Zalo),
+# va noi ro vi sao can — khach chiu cho so khi hieu ly do.
+MSG_DA_CHUYEN_WEB = (
+    "Dạ em đã ghi nhận và báo cho anh/chị phụ trách rồi ạ. "
+    "Anh/chị để lại số điện thoại hoặc Zalo giúp em để bên em liên hệ lại nhé — "
+    "vì ở đây sau khi mình đóng trang thì em không nhắn lại được ạ."
+)
+
+
+def la_web(chat_id: str) -> bool:
+    return chat_id.startswith("web:")
+
+
+def loi_da_chuyen(chat_id: str) -> str:
+    """Cau bao khach, tuy theo kenh.
+
+    Mot ham nho thay vi hai duong ban giao — xem docstring dau file: duong ban
+    giao thu hai la thu chinh module nay sinh ra de ngan.
+    """
+    return MSG_DA_CHUYEN_WEB if la_web(chat_id) else MSG_DA_CHUYEN
+
+
+def them_xin_lien_lac(chat_id: str, text: str) -> str:
+    """Tren web, ghep them cau xin so dien thoai vao cuoi cau tra loi."""
+    if not la_web(chat_id):
+        return text
+    return text + "\n\n" + MSG_DA_CHUYEN_WEB
+
 
 @dataclass(frozen=True, slots=True)
 class KetQuaBanGiao:

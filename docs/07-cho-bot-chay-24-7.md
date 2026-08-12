@@ -203,3 +203,4 @@ git pull && docker compose up -d --build
 - [`05-chuyen-len-vps.md`](05-chuyen-len-vps.md) — quy trình VPS đầy đủ
 - [`03-loi-hay-gap.md`](03-loi-hay-gap.md) — `error_code: 408` là bình thường
 - [`06-dung-bot-tren-zalo.md`](06-dung-bot-tren-zalo.md) — đưa bot cho khách và cho nhóm
+- [`08-nhung-len-website.md`](08-nhung-len-website.md) — widget chat trên website
