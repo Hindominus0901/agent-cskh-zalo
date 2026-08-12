@@ -2,6 +2,11 @@
 
 File này là luật viết kho tri thức. Đọc trước khi thêm trang đầu tiên.
 
+> **Dành cho MỌI coding agent, không riêng Claude.** Tên file là `CLAUDE.md` chỉ
+> vì Claude Code tự nạp file này khi làm việc trong thư mục `knowledge/` — tiện
+> thì giữ. Codex và Cursor đọc nó theo đường dẫn, và cũng **bắt buộc** phải đọc
+> trước khi viết trang đầu tiên.
+
 Theo phương pháp **LLM Wiki của Andrej Karpathy**: không vector database, không
 embedding — chỉ Markdown liên kết với nhau, người đọc được, người sửa được.
 
