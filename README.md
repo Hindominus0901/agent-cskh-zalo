@@ -14,8 +14,12 @@ Code, Cursor, Codex), nó sẽ đọc `HUONG-DAN-AGENT.md`, phỏng vấn bạn,
 **1. Tải về**
 
 ```bash
-git clone <link-repo-cua-ban>
+git clone https://github.com/Hindominus0901/agent-cskh-zalo.git
 ```
+
+Hoặc bấm nút xanh **"Use this template"** trên GitHub để có bản của riêng mình —
+nên làm thế, vì bot của bạn sẽ chứa thông tin doanh nghiệp. **Bản của bạn phải để
+private**, xem mục [Bảo mật](#bảo-mật).
 
 **2. Mở thư mục vừa tải bằng Claude Code, Codex hoặc Cursor, rồi gõ đúng câu này:**
 
