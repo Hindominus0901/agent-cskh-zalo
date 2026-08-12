@@ -65,9 +65,24 @@ class TestPhanQuyen:
         assert "chat_id: c1" in out
 
     async def test_prompt_cua_nguoi_la_khong_mo_kho_noi_bo(self, rig) -> None:
+        """Bam vao BAO DAM, khong bam vao cau chu.
+
+        Truoc day test nay tim dung mot cau — va no do ngay khi khoi `_STRANGER`
+        duoc viet lai, du bao dam that van con nguyen. Test bam cau chu thi moi
+        lan sua van phong deu thanh mot bao dong gia.
+        """
         await run_one(rig, make_event("hỏi gì đó"))
         system = rig["provider"].systems[0]
-        assert "không phải người nội bộ" in system
+
+        assert "Chỉ dùng thông tin công khai" in system
+        assert "giá vốn" in system, "phai liet ke ro thu khong duoc tiet lo"
+        # Khoi cua vai NOI BO khong duoc lot vao prompt cua nguoi la.
+        assert "toàn bộ kho tri thức" not in system
+
+    async def test_prompt_cua_nguoi_la_KHONG_bao_go_lenh(self, rig) -> None:
+        """Bot khong bao gio duoc day khach go lenh — ho la khach hang."""
+        await run_one(rig, make_event("hỏi gì đó"))
+        assert "KHÔNG bảo ai gõ lệnh" in rig["provider"].systems[0]
 
     async def test_chu_bot_dung_duoc_lenh_noi_bo(self, rig, tmp_path, monkeypatch) -> None:
         rig["dispatcher"]._resolver._owners = {"u1"}  # noqa: SLF001
