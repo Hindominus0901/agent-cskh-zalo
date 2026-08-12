@@ -27,6 +27,45 @@ Template này chạy trên **Zalo Bot Creator**, và bạn **không cần OA doa
 
 Nếu đọc ở đâu đó bảo "phải có OA đã" thì đó là hướng dẫn cho loại thứ hai.
 
+### Nhưng OA làm được nhiều thứ hơn
+
+Bảng trên chỉ so **cách tạo**. So về **năng lực** thì khác hẳn — và đây là chỗ
+nhiều người hiểu nhầm rằng OA chỉ là "phiên bản phiền hơn":
+
+| Năng lực | Bot Creator | Zalo OA |
+|---|:---:|:---:|
+| Trả lời tin nhắn khách | ✅ | ✅ |
+| Nhận và xem ảnh | ✅ | ✅ |
+| **Nút bấm, menu, tin nhắn có thẻ** | ❌ | ✅ |
+| **Nhắn chủ động cho khách** (ZNS: xác nhận đơn, nhắc lịch) | ❌ | ✅ |
+| **Nhắn cho người chưa từng nhắn mình** | ❌ | ✅ |
+| Gửi/nhận file tài liệu | ❌ | ✅ |
+| Hạn mức tin nhắn | 3.000/tháng | Theo gói, cao hơn nhiều |
+| Số người dùng | 50 | Không giới hạn như vậy |
+| Gắn mini app, form, thanh toán | ❌ | ✅ |
+
+Nói cách khác: **phần lớn giới hạn trong
+[`02-gioi-han-zalo.md`](02-gioi-han-zalo.md) là hệ quả của việc chọn Bot Creator**,
+không phải giới hạn của Zalo nói chung.
+
+### Khi nào bạn buộc phải lên OA
+
+Bốn dấu hiệu. Gặp một trong số đó thì Bot Creator không đủ nữa:
+
+1. **Cần nhắn chủ động** — xác nhận đơn, nhắc lịch hẹn, báo hàng đã giao. Bot
+   Creator không lấy được `chat_id` từ số điện thoại, nên **không nhắn trước cho
+   ai được**, kể cả khách đã mua.
+2. **Vượt 3.000 tin/tháng** — khoảng 300 cuộc trò chuyện, tức 10 cuộc/ngày.
+3. **Quá 50 người dùng.**
+4. **Cần nút bấm** — đặt lịch, chọn món, xác nhận đơn bằng một chạm.
+
+Chưa gặp dấu hiệu nào thì **đừng lên OA vội**. Nó tốn giấy tờ, tốn thời gian
+duyệt, và bạn sẽ phải viết lại lớp kênh (`agent_cskh/transport/`) vì OA dùng API
+khác hẳn — `openapi.zalo.me` thay vì `bot-api.zaloplatforms.com`.
+
+Kho tri thức, persona, kỹ năng của bạn **giữ nguyên** khi chuyển. Chỉ lớp nối
+Zalo phải làm lại.
+
 ---
 
 ## Bước 1 — Tạo bot trong ứng dụng Zalo (~5 phút)

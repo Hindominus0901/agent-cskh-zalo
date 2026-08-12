@@ -199,7 +199,7 @@ class Application:
         # Health duoc truyen vao de scheduler biet khi nao Zalo im lang.
         # Luu y van hanh: ngay 05/08/2026 getUpdates cua Zalo chet ~2 tieng (504/502
         # tren moi bot) roi tu hoi phuc. Polling khong can ten mien nen tien cho may
-        # local; webhook on dinh hon cho chay that. Xem docs/04-van-hanh.md.
+        # local; webhook on dinh hon cho chay that. Xem docs/03-loi-hay-gap.md.
         return PollingTransport(self._s, client, self._health)
 
     async def _consume(self, transport: Transport, dispatcher: TurnDispatcher) -> None:

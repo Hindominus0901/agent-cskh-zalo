@@ -97,6 +97,9 @@ Từ câu trả lời — **và chỉ từ câu trả lời** — viết:
 Đọc `knowledge/CLAUDE.md` trước khi viết trang đầu tiên. Quan trọng nhất: trường
 `summary` và trường `tu_khoa`.
 
+Cần một trang hoàn chỉnh để chép theo: `docs/vi-du-trang-wiki.md`.
+Chưa rõ ranh giới giữa bốn trụ cột: `docs/04-bon-tru-cot.md`.
+
 Rồi dựng lại danh mục:
 
 ```bash

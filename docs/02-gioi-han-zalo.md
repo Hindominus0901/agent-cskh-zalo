@@ -3,6 +3,11 @@
 Những giới hạn này đến từ **nền tảng Zalo**, không phải từ template. Không có
 cách nào lập trình vòng qua.
 
+> **Phần lớn chúng là giới hạn của Zalo Bot Creator, không phải của Zalo nói
+> chung.** Zalo OA doanh nghiệp không bị mấy giới hạn này — nhưng nó là một sản
+> phẩm khác, tốn công hơn hẳn. Xem
+> [mục so sánh cuối `01-noi-zalo.md`](01-noi-zalo.md#khi-nào-bạn-buộc-phải-lên-oa).
+
 Biết trước thì thiết kế được cách làm việc quanh nó. Biết sau thì đã hứa với
 khách mất rồi.
 
@@ -96,6 +101,29 @@ Zalo không cho tra ngược. Nghĩa là **bot không nhắn trước cho một 
 nhắn cho nó** — kể cả khi bạn biết số điện thoại của họ.
 
 Đây là một trong những lý do template chưa làm chức năng nhắn chủ động.
+
+---
+
+## 8. Ảnh: URL hết hạn, và có giới hạn dung lượng
+
+Zalo gửi ảnh cho bot dưới dạng **một đường link tạm**. Link đó **hết hạn**, nên
+bot phải tải ảnh về ngay trong lượt đó — để lại link rồi mở sau là mở vào chỗ trống.
+
+Bot đã làm đúng việc này (ảnh biên lai được tải về `data/media/`), nhưng nó giải
+thích vì sao thư mục đó lớn dần và **bạn phải sao lưu nó** cùng với cơ sở dữ liệu.
+
+Ảnh quá lớn (khoảng trên 5MB) có thể không tải về được. Dặn khách chụp bình
+thường, đừng gửi ảnh gốc từ máy ảnh.
+
+---
+
+## 9. Tên bot bắt buộc bắt đầu bằng chữ "Bot"
+
+Khi tạo trong Zalo Bot Creator, tên phải có tiền tố `Bot` — ví dụ `Bot Gác Nhỏ`.
+Không có là không tạo được, và thông báo lỗi không nói rõ lý do.
+
+Nghĩa là khách sẽ luôn nhìn thấy chữ "Bot" trong tên. Đặt tên sao cho nó tự
+nhiên: `Bot Gác Nhỏ` đọc ổn hơn `Bot CSKH GN-2026`.
 
 ---
 

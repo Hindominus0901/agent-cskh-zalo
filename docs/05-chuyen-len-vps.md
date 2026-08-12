@@ -286,5 +286,5 @@ kiểm tra biến đó còn không.
 
 **Webhook không nhận được gì.** Kiểm tra theo thứ tự: `curl` tới `/health` từ ngoài
 Internet có thông không → `getWebhookInfo` có trỏ đúng URL không → log Caddy có thấy
-request từ Zalo không. Nếu cả ba đều ổn mà vẫn không có tin, xem `docs/04-van-hanh.md`
+request từ Zalo không. Nếu cả ba đều ổn mà vẫn không có tin, xem `docs/03-loi-hay-gap.md`
 — đã có tiền lệ hạ tầng Zalo chết chứ không phải lỗi mình.

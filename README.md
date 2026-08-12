@@ -84,6 +84,9 @@ làm lại gì cả.
 | **Công cụ** | `agent_cskh/tools/` | Bot làm được gì — lưu khách, chuyển người thật, đọc ảnh |
 | **Kỹ năng** | `skills/` | Bot làm theo quy trình nào — báo giá, xử lý phàn nàn |
 
+**Bot trả lời sai thì sửa ở đâu?** Có bảng chẩn đoán trong
+[docs/04-bon-tru-cot.md](docs/04-bon-tru-cot.md) — đọc một lần là đủ dùng mãi.
+
 Thứ bạn sửa thường xuyên nhất là **`knowledge/`**, và nó là Markdown thuần — sửa
 được bằng Notepad, hoặc sửa thẳng từ điện thoại — chỉ cần nhắn “thêm trang …” ngay trong
 Zalo.
