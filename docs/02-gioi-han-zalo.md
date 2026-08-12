@@ -47,8 +47,8 @@ nhắn.
 **Hệ quả thực tế:**
 
 - Chạy trên máy cá nhân chỉ hợp để **thử và học**
-- Chạy thật với khách thật thì cần **VPS chạy 24/7** — xem
-  [05-chuyen-len-vps.md](05-chuyen-len-vps.md)
+- Chạy thật với khách thật thì cần một máy **không bao giờ tắt** — chọn cách ở
+  [07-cho-bot-chay-24-7.md](07-cho-bot-chay-24-7.md)
 - Trên macOS nhớ tắt chế độ ngủ, hoặc dùng `caffeinate`
 
 ---

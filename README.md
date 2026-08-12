@@ -40,6 +40,13 @@ Muốn đưa lên Zalo thật thì mở [docs/01-noi-zalo.md](docs/01-noi-zalo.m
 bằng **Zalo Bot Creator**, mất khoảng 5 phút, **không cần OA doanh nghiệp và
 không phải chờ duyệt**.
 
+**4. Cho nó chạy thật 24/7**
+
+Chạy bằng terminal thì đóng cửa sổ là bot chết — mà **tin nhắn gửi lúc bot tắt là
+mất hẳn**, Zalo không gửi bù. Ba cách cho bot sống mãi (máy cá nhân, VPS, máy cũ),
+kèm bảng kiểm trước khi phát link cho khách:
+[docs/07-cho-bot-chay-24-7.md](docs/07-cho-bot-chay-24-7.md).
+
 ---
 
 ## Hai chế độ — bắt đầu từ bản 0 đồng

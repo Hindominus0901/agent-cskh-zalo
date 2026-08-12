@@ -14,6 +14,10 @@ khi bot dang chay va dang ghi.
 Sao luu ca `knowledge/` vi tu 08/08/2026 nhan vien sua duoc no thang tu Zalo.
 Git da theo doi thu muc do, nhung git chi nam tren cung o dia — o dia hong thi
 mat ca hai.
+
+Sao luu ca `data/media/` — anh bien lai khach gui. Zalo chi dua mot URL TAM va
+URL do DA HET HAN, nen file trong thu muc nay la ban duy nhat con lai tren doi.
+Mat no la mat bang chung thanh toan, khong tai lai duoc tu bat cu dau.
 """
 
 from __future__ import annotations
@@ -73,6 +77,16 @@ def sao_luu() -> int:
         so_trang = len(list(kho_dich.rglob("*.md")))
         print(f"Kho       -> {kho_dich.name}  ({so_trang} trang)")
 
+    # --- Anh bien lai ---
+    # Khong the tai lai tu Zalo: URL goc da het han. Day la ban duy nhat.
+    media = settings.media_dir
+    if media.exists() and any(media.iterdir()):
+        media_dich = dich / f"media-{dau}"
+        shutil.copytree(media, media_dich, ignore=shutil.ignore_patterns("__pycache__"))
+        so_anh = sum(1 for p in media_dich.rglob("*") if p.is_file())
+        kt_mb = sum(p.stat().st_size for p in media_dich.rglob("*") if p.is_file()) / 1024 / 1024
+        print(f"Ảnh       -> {media_dich.name}  ({so_anh} ảnh, {kt_mb:.1f} MB)")
+
     # --- Don ban cu ---
     da_xoa = _don_ban_cu(dich)
     if da_xoa:
@@ -85,7 +99,7 @@ def sao_luu() -> int:
 
 def _don_ban_cu(dich: Path) -> int:
     n = 0
-    for mau in ("app-*.db", "knowledge-*"):
+    for mau in ("app-*.db", "knowledge-*", "media-*"):
         ds = sorted(dich.glob(mau), key=lambda p: p.name, reverse=True)
         for cu in ds[GIU_LAI:]:
             if cu.is_dir():

@@ -139,6 +139,36 @@ trong app Zalo qua OA *Zalo Bot Manager*, bằng tài khoản cá nhân.
 **Đừng bảo họ đi đăng ký OA doanh nghiệp.** Đó là một sản phẩm khác của Zalo,
 tốn cả ngày chờ duyệt và không cần cho template này.
 
+### B7 — Cho bot sống được sau khi bạn đi khỏi
+
+**Đừng dừng ở B6.** Nếu bạn giao lại một cửa sổ terminal đang chạy rồi kết thúc,
+bot sẽ chết ngay lần đầu họ đóng cửa sổ hoặc tắt máy — và **mọi tin nhắn khách gửi
+lúc đó mất hẳn**, Zalo không gửi bù, không ai biết đã mất khách nào.
+
+Nói thẳng câu này với họ, đừng để họ tự phát hiện.
+
+Hai việc phải làm cùng họ:
+
+1. **Cài tự khởi động** — `.\scripts\cai_tu_khoi_dong.ps1` (Windows) hoặc
+   `./scripts/cai_tu_khoi_dong.sh` (macOS)
+2. **Tắt chế độ ngủ của máy.** Đây là bước ai cũng quên và nó vô hiệu hoá bước 1
+   — máy ngủ thì bot cũng ngủ.
+
+Rồi hỏi họ một câu:
+
+> Bot này sẽ phục vụ khách thật, hay chỉ để thử?
+
+- **Chỉ để thử** → máy cá nhân là đủ. Nói rõ những gì sẽ mất: mất mạng, Windows
+  tự khởi động lại ban đêm, mang laptop đi họp.
+- **Khách thật** → họ cần **VPS** (~50–150k/tháng). Mở
+  `docs/07-cho-bot-chay-24-7.md` rồi đi cùng họ.
+
+**Không tự thuê VPS, không tự mua gì cho họ.** Đó là tiền của họ và tài khoản của
+họ. Việc của bạn là giải thích lựa chọn rồi làm theo quyết định của họ.
+
+Cuối cùng, đọc to **bảng kiểm cuối `docs/07`** cho họ nghe trước khi họ phát link
+bot cho khách.
+
 ---
 
 ## Những thứ không được sửa

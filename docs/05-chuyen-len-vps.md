@@ -1,5 +1,12 @@
 # Chuyển lên VPS chạy 24/7
 
+> **Chưa chắc có cần VPS không?** Đọc
+> [`07-cho-bot-chay-24-7.md`](07-cho-bot-chay-24-7.md) trước — nó so ba cách chạy
+> 24/7 và giúp bạn chọn. Tài liệu này là quy trình chi tiết sau khi đã chọn VPS.
+>
+> Và nếu bạn dùng polling (mặc định) thì **bỏ qua toàn bộ phần "Chuyển sang
+> webhook"** — không cần tên miền, không cần Cloudflare.
+
 Chạy trên máy Windows thì **tắt máy là bot chết, và tin nhắn gửi trong lúc đó mất
 hẳn** — `getUpdates` của Zalo không có `offset`, họ không lưu lại tin để giao sau.
 Đó là lý do duy nhất cần VPS. Mọi thứ khác chạy tốt trên máy local.

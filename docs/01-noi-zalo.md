@@ -311,7 +311,9 @@ Bản cũ luôn được giữ lại, sửa nhầm không mất.
 Máy tính cá nhân tắt hoặc ngủ là bot dừng, và **tin nhắn gửi lúc đó mất hẳn** —
 Zalo không lưu lại (xem [02-gioi-han-zalo.md](02-gioi-han-zalo.md)).
 
-Muốn chạy thật lâu dài thì thuê VPS: [05-chuyen-len-vps.md](05-chuyen-len-vps.md).
+Muốn chạy thật lâu dài: [07-cho-bot-chay-24-7.md](07-cho-bot-chay-24-7.md) —
+chọn giữa máy cá nhân, VPS và máy cũ ở nhà. Quy trình VPS chi tiết ở
+[05-chuyen-len-vps.md](05-chuyen-len-vps.md).
 
 ---
 

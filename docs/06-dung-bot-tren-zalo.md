@@ -131,5 +131,10 @@ tổng số người dùng) và tab *Chia sẻ* (link). Chi tiết ở
 
 ---
 
+**Bot phải luôn bật thì khách nhắn mới tới nơi** — tin gửi lúc bot tắt là mất
+hẳn. Xem [`07-cho-bot-chay-24-7.md`](07-cho-bot-chay-24-7.md).
+
+---
+
 *Nguồn: [tài liệu Zalo Bot — tương tác với nhóm](https://docs.zaloplatforms.com/docs/BOT/best-practices/build-bot-interaction-with-group).
 Phần về ảnh trong nhóm là quan sát thực tế, chưa có trong tài liệu chính thức.*
