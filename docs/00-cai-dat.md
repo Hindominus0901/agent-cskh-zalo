@@ -117,15 +117,18 @@ thư mục làm việc ngay từ đầu.
 toàn cho nhanh. Đừng — bước phỏng vấn *cần* nó dừng lại hỏi bạn, đó là cả điểm
 mấu chốt.
 
-**Nó không tự thấy `PHONG-VAN.md`.** Khác Claude Code, Codex không quét thư mục
-skill. Nó phải đọc `AGENTS.md` → `HUONG-DAN-AGENT.md` → rồi mới tới `PHONG-VAN.md`.
-Thấy nó bỏ qua bước phỏng vấn thì nhắc thẳng:
+**Nó tới `PHONG-VAN.md` qua ba chặng.** Khác Claude Code, Codex không quét thư mục
+skill. Nó đi `AGENTS.md` → `HUONG-DAN-AGENT.md` → rồi mới tới `PHONG-VAN.md`.
+Chuỗi đó chạy được, nhưng nếu có lúc nào thấy nó nhảy thẳng vào viết file thì
+nhắc một câu là đủ:
 
 > Đọc PHONG-VAN.md rồi hỏi tôi từng câu một.
 
-> **Chưa kiểm chứng:** phần Codex ở trên viết theo cách Codex đọc `AGENTS.md`,
-> nhưng **chưa có ai chạy thử thật** một lần nào từ đầu đến cuối. Bạn là người
-> đầu tiên thì gặp gì lệch, sửa lại giúp file này.
+> **Đã chạy thử thật (12/08/2026).** Codex tự đi hết chuỗi trên và **tự hỏi từng
+> câu một** mà không cần nhắc. Không vấp chỗ nào.
+>
+> Vẫn còn hai thứ chưa ai kiểm: chạy trên **macOS**, và nối **Zalo thật**. Bạn là
+> người đầu tiên làm thì gặp gì lệch, sửa lại giúp file này.
 
 ---
 

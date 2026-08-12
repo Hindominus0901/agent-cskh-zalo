@@ -28,6 +28,9 @@ private**, xem mục [Bảo mật](#bảo-mật).
 Dùng công cụ nào cũng được — cả ba đều dẫn về cùng một hướng dẫn. Chi tiết cho
 từng công cụ: [docs/00-cai-dat.md](docs/00-cai-dat.md).
 
+Đã chạy thử thật với **Claude Code** và **Codex** — cả hai đều tự phỏng vấn từng
+câu một mà không cần nhắc. Cursor thì chưa ai thử.
+
 Nó sẽ hỏi bạn khoảng 17 câu về doanh nghiệp — bán gì, khách hay hỏi gì, giá thế
 nào, điều gì bot tuyệt đối không được nói. **Trả lời thật, đừng trả lời cho có:**
 bot chỉ biết đúng những gì bạn kể.
