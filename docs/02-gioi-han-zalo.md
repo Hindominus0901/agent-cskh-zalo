@@ -22,7 +22,7 @@ qua lại 5 lượt tốn khoảng 10 tin.
 3.000 tin ≈ **300 cuộc trò chuyện/tháng** ≈ 10 cuộc/ngày.
 
 Bot tự cảnh báo khi dùng tới 80%, và tự dừng ở 95% để không bị Zalo khoá đột ngột.
-Xem bất cứ lúc nào bằng `/trangthai`.
+Xem bất cứ lúc nào bằng cách nhắn *“còn bao nhiêu tin”*.
 
 Gói Pro (129.000đ/tháng) vẫn đang "sắp ra mắt" — đã như vậy khá lâu.
 
@@ -56,7 +56,7 @@ Khách gửi PDF, Word, Excel → **bot không nhận được gì cả**. Khôn
 Bot cũng không gửi file đi được. Chỉ có: **chữ, ảnh, sticker**.
 
 **Cách làm việc quanh nó:** dặn khách chụp màn hình gửi ảnh. Bot đọc được ảnh (ở
-chế độ `ai`). Câu này đã có sẵn trong `/help`.
+chế độ `ai`). Câu này đã có sẵn trong phần trợ giúp của bot.
 
 ---
 

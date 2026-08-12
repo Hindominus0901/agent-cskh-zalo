@@ -32,8 +32,8 @@ async def cmd_nhogi(ctx: TurnContext) -> bool:
         nguon = " (đội ngũ ghi)" if n.do_doi_ngu_ghi else ""
         dong.append(f"• {n.khoa}: {n.gia_tri}{nguon}")
     dong.append("")
-    dong.append("Muốn em quên điều nào thì gõ: /xoanho <tên mục>")
-    dong.append("Quên hết: /xoanho tatca")
+    dong.append("Muốn em quên điều nào thì nhắn: quên giùm tôi <tên mục>")
+    dong.append("Quên hết: quên giùm tôi tất cả")
     await ctx.reply("\n".join(dong))
     return True
 

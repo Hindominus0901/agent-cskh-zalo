@@ -180,6 +180,6 @@ rồi để họ tự dán token và key vào. `.env` đã nằm trong `.gitigno
 giờ gỡ nó ra.
 
 **`knowledge/` được git theo dõi, và đó là có chủ đích.** Nhân viên sửa được kho
-tri thức từ điện thoại qua lệnh `/themtrang`, nên git là đường lùi duy nhất. Nếu
+tri thức từ điện thoại (chỉ cần nhắn “thêm trang …”), nên git là đường lùi duy nhất. Nếu
 sau này thêm remote GitHub, repo phải để **private** — `wiki/internal/` chứa
 thông tin nội bộ.

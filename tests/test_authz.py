@@ -233,15 +233,15 @@ class TestKenhNhanNoiDungNoiBo:
 
 
 class TestHelpKhongTroi:
-    """/help phai theo kip bang lenh — ca hai chieu.
+    """Phan tro giup phai noi bang LOI, khong bang lenh.
 
-    Mot lenh khong ai biet la mot lenh khong ton tai. Mot lenh duoc quang cao ma
-    da bi go la mot cau tra loi sai giua cuoc tro chuyen. Ca hai deu la kieu hong
-    im lang: bo test van xanh, chi co nguoi dung la vap.
+    Tu 12/08/2026 template bo han viec bat nguoi dung go lenh: khach hang that
+    khong go `/baocao`, va chu shop cung khong — ho ban hang, khong dung terminal.
+    Lenh `/...` van chay ngam lam duong lui, nhung khong o dau quang cao chung.
+
+    Mot dau gach cheo lot vao day la mot nguoi dung duoc day sai cach dung bot.
     """
 
-    # /start va /help khong tu quang cao — biet ro va co y.
-    KHONG_CAN_QUANG_CAO = {"start", "help"}
     # Bi danh tieng Anh, khong phai lenh chinh.
     from agent_cskh.commands.router import ALIASES
 
@@ -261,19 +261,24 @@ class TestHelpKhongTroi:
 
         return HELP_PUBLIC + HELP_INTERNAL + HELP_HOC_VIEN + "".join(HELP_CHU_DE.values())
 
-    def test_moi_lenh_noi_bo_deu_duoc_nhac_toi(self) -> None:
-        h = self._help_day_du()
-        thieu = [
-            n
-            for n, (_, role) in COMMANDS.items()
-            if role in ("staff", "owner") and n not in self.KHONG_CAN_QUANG_CAO and f"/{n}" not in h
-        ]
-        assert not thieu, f"lệnh nội bộ không ai biết: {thieu}"
+    def test_KHONG_MOT_DAU_GACH_CHEO_NAO(self) -> None:
+        """Bat dau la mot lenh lot vao phan tro giup."""
+        lot = sorted(set(self._LENH.findall(self._help_day_du())))
+        assert not lot, f"phan tro giup con quang cao lenh: {lot}"
 
-    def test_help_khong_quang_cao_lenh_da_bi_go(self) -> None:
-        hop_le = set(COMMANDS) | set(self.ALIASES)
-        nhac_toi = set(self._LENH.findall(self._help_day_du()))
-        assert not (nhac_toi - hop_le), f"/help nhắc lệnh không tồn tại: {nhac_toi - hop_le}"
+    def test_moi_viec_noi_bo_deu_noi_duoc_bang_loi(self) -> None:
+        """Mot viec khong ai biet cach goi la mot viec khong ton tai.
+
+        Truoc day test nay kiem `/lenh` co trong help khong. Gio kiem thu dung
+        hon: moi viec noi bo phai co it nhat mot CACH NOI trong bang y dinh.
+        """
+        from agent_cskh.y_dinh.nhan_dien import Y_DINH
+
+        noi_duoc = {y.lenh for y in Y_DINH} | {"help", "start"}
+        thieu = [
+            n for n, (_, role) in COMMANDS.items() if role in ("staff", "owner") and n not in noi_duoc
+        ]
+        assert not thieu, f"viec noi bo khong noi bang loi duoc: {thieu}"
 
     def test_hoc_vien_chi_thay_MOT_NHUM_NHO_lenh(self) -> None:
         """Hoc vien nhan tin nhu noi chuyen, khong ai hoc thuoc menu.
@@ -293,12 +298,15 @@ class TestHelpKhongTroi:
 
         assert len(set(self._LENH.findall(HELP_INTERNAL))) <= 12
 
-    def test_moi_nhom_tra_sau_deu_co_duong_den_tu_ban_ngan(self) -> None:
-        """Mot nhom khong duoc nhac toi la mot nhom khong ton tai."""
-        from agent_cskh.commands.public import HELP_CHU_DE, HELP_INTERNAL
+    def test_moi_nhom_tra_sau_deu_GOI_DUOC_bang_loi(self) -> None:
+        """Mot nhom khong ai goi ra duoc la mot nhom khong ton tai."""
+        from agent_cskh.commands.public import HELP_CHU_DE
+        from agent_cskh.y_dinh import doan_y_dinh
 
         for nhom in HELP_CHU_DE:
-            assert f"/help {nhom}" in HELP_INTERNAL, f"nhóm '{nhom}' không ai tìm ra"
+            cach_goi = {"kho": "hướng dẫn kho", "viec": "hướng dẫn việc",
+                        "hethong": "hướng dẫn hệ thống"}[nhom]
+            assert doan_y_dinh(cach_goi) == ("help", nhom), f"nhóm '{nhom}' không gọi được"
 
 
 class TestPersonaCoDuThanhPhan:

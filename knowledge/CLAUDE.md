@@ -126,7 +126,7 @@ trang, không phải hai mục trong một trang. Tách ra thì bot cũng chọn
 
    Nếu thêm xong mà **không trang nào khác đổi**, dừng lại tự hỏi có thật thế không.
 5. `uv run python scripts/wiki_index.py` — dựng lại `index.md`, soát liên kết gãy.
-6. Bot đang chạy thì nhắn `/nap` để nạp lại, không cần khởi động lại.
+6. Bot đang chạy thì nhắn “nạp lại kho” để nạp lại, không cần khởi động lại.
 
 ---
 
@@ -153,7 +153,8 @@ thêm một trang, hôm sau bot trả lời được.
   chú "đã cũ". Bot đọc cả phần ghi chú.
 - Chạy `scripts/wiki_index.py` để soát: trang thiếu `summary`, thiếu `tu_khoa`,
   liên kết `[[...]]` gãy, index lệch với thư mục.
-- Sửa được từ điện thoại: `/themtrang`, `/suatrang`, `/xoatrang`, `/dstrang`.
+- Sửa được từ điện thoại, nói bằng lời: “thêm trang công khai <tên>”, “sửa trang <tên>”,
+  “xoá trang <tên>”, “có những trang nào”. Việc xoá và sửa bot hỏi lại trước khi làm.
   Bản cũ luôn được giữ lại thành `.md.bak`.
 - Phương pháp này chạy tốt tới khoảng **vài trăm trang**. Vượt mức đó thì cân
   nhắc tìm kiếm bằng embedding — nhưng chỉ khi đã thật sự vượt, không phải vì lo xa.

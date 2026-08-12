@@ -229,15 +229,15 @@ curl https://bot.tenmiencuaban.com/health
 | Xem log | `docker compose logs -f --tail=100` |
 | Khởi động lại | `docker compose restart` |
 | Cập nhật mã | `git pull && docker compose up -d --build` |
-| Sửa kho tri thức | Sửa file trong `knowledge/` rồi nhắn `/nap` cho bot |
+| Sửa kho tri thức | Sửa file trong `knowledge/` rồi nhắn “nạp lại kho” cho bot |
 | Sao lưu | `docker compose exec bot python scripts/sao_luu.py` |
-| Xem báo cáo | Nhắn `/baocao` cho bot, hoặc đợi báo cáo tự động 20:00 |
+| Xem báo cáo | Nhắn “báo cáo hôm nay” cho bot, hoặc đợi báo cáo tự động 20:00 |
 
 Bot tự khởi động lại khi VPS reboot nhờ `restart: unless-stopped`.
 
 ### Xem bot còn thiếu gì
 
-Không cần vào VPS. Nhắn **`/baocao`** cho bot ngay trong Zalo — mục *"câu bot
+Không cần vào VPS. Nhắn **“báo cáo hôm nay”** cho bot ngay trong Zalo — mục *"câu bot
 KHÔNG trả lời được"* là danh sách trang cần viết thêm, đã gom theo số người hỏi.
 
 Bot cũng tự gửi báo cáo này lúc 20:00 hằng ngày về kênh cảnh báo.

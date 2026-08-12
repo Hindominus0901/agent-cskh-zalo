@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Awaitable, Callable
+from dataclasses import replace
 from typing import Protocol
 
 from agent_cskh.config import Settings
@@ -29,6 +30,7 @@ from agent_cskh.tools.base import ToolRegistry
 from agent_cskh.transport.base import InboundEvent
 from agent_cskh.transport.zalo_client import ZaloClient
 from agent_cskh.wiki import WikiStore
+from agent_cskh.y_dinh import CongXacNhan, doan_y_dinh, la_dong_y, la_nguy_hiem, mo_ta_viec
 
 log = get_logger(__name__)
 
@@ -95,6 +97,7 @@ class TurnDispatcher:
         self._health = health or Health()
         self._health_model = health_model or Health(ten="Claude")
         self._commands = command_handler
+        self._xac_nhan = CongXacNhan()
 
         self._queues: dict[str, asyncio.Queue[InboundEvent]] = {}
         self._workers: dict[str, asyncio.Task[None]] = {}
@@ -218,11 +221,17 @@ class TurnDispatcher:
             daily_cost_exceeded=vuot_tran,
         )
 
-        # Lenh /... xu ly trong code, khong ton token LLM.
-        if self._commands is not None and event.is_command:
-            handled = await self._commands(ctx)
-            if handled:
-                return
+        # Lenh xu ly trong code, khong ton token LLM.
+        #
+        # Hai duong vao cung mot noi:
+        #   1. Go `/baocao` — duong cu, van chay, khong tai lieu nao nhac toi
+        #   2. Noi "báo cáo hôm nay" — duong chinh, danh cho nguoi that
+        #
+        # Ca hai deu di qua `commands/router.handle()`, nen MA TRAN QUYEN chi co
+        # mot ban. Nguoi la noi "bao cao hom nay" khong chay duoc gi, y het nhu
+        # ho go `/baocao`.
+        if self._commands is not None and await self._thu_lenh(ctx):
+            return
 
         # LOP 2 siet pham vi: chan TRUOC khi goi LLM, tiet kiem ca quota Zalo lan
         # tien token. Chi bat nhung nhom khong bao gio duoc tra loi bat ke kho
@@ -236,6 +245,71 @@ class TurnDispatcher:
                 return
 
         await self._loop.run_turn(ctx)
+
+    async def _thu_lenh(self, ctx: TurnContext) -> bool:
+        """Chay lenh neu tin nay la lenh, hoac neu doan duoc y dinh. True = da xu ly.
+
+        Cach lam: VIET LAI `event.text` thanh dang `/lenh tham_so` roi tha vao
+        dung duong cu. `is_command` / `command` / `command_args` deu suy ra tu
+        `text`, nen khong mot dong nao trong `commands/` phai doi.
+        """
+        assert self._commands is not None
+        event = ctx.event
+
+        # 1. Go lenh that -> chay thang, KHONG qua cong xac nhan. Go dung
+        #    `/xoatrang bang-gia` la mot hanh dong co y thuc, khong phai cau doan.
+        if event.is_command:
+            self._xac_nhan.huy(event.chat_id)
+            return await self._commands(ctx)
+
+        text = event.text or ""
+
+        # 2. Dang cho xac nhan mot viec nguy hiem?
+        if self._xac_nhan.dang_cho(event.chat_id):
+            if la_dong_y(text):
+                cho = self._xac_nhan.lay(event.chat_id)
+                if cho is not None:
+                    log.info("da_xac_nhan", chat_id=event.chat_id[:8], lenh=cho.lenh)
+                    return await self._commands(self._ctx_lenh(ctx, cho.lenh, cho.tham_so))
+                return False
+            # Noi chuyen khac -> bo viec dang cho. Khong hoi lai lan hai.
+            self._xac_nhan.huy(event.chat_id)
+
+        # 3. Doan y dinh tu cau noi thuong.
+        doan = doan_y_dinh(text)
+        if doan is None:
+            return False
+        lenh, tham_so = doan
+
+        # Nhap o day chu khong o dau file: `commands.router` -> `commands.bo_nho`
+        # -> `harness.turn` -> `harness/__init__` -> chinh file nay. Vong tron.
+        from agent_cskh.commands.router import COMMANDS
+
+        # Kiem quyen TRUOC khi hoi xac nhan: nguoi khong duoc lam viec do thi
+        # khong duoc biet viec do ton tai. Giong het cach `ToolRegistry` tu choi.
+        entry = COMMANDS.get(lenh)
+        if entry is None or not ctx.principal.at_least(entry[1]):
+            return False
+
+        if la_nguy_hiem(lenh):
+            await ctx.reply(
+                self._xac_nhan.dat(
+                    event.chat_id,
+                    lenh=lenh,
+                    tham_so=tham_so,
+                    mo_ta=mo_ta_viec(lenh, tham_so),
+                )
+            )
+            return True
+
+        log.info("y_dinh_khop", lenh=lenh, role=ctx.principal.role)
+        return await self._commands(self._ctx_lenh(ctx, lenh, tham_so))
+
+    @staticmethod
+    def _ctx_lenh(ctx: TurnContext, lenh: str, tham_so: str) -> TurnContext:
+        """Ban sao cua ctx voi `event.text` da viet lai thanh dang lenh."""
+        text = f"/{lenh} {tham_so}".rstrip()
+        return replace(ctx, event=replace(ctx.event, text=text))
 
     # ---------- tien ich ----------
     async def _reply_raw(self, chat_id: str, text: str) -> None:

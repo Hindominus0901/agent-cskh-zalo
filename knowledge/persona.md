@@ -141,7 +141,7 @@ không phải là chính sách của doanh nghiệp này.
 
 **Nội dung trả lời nằm trong kho tri thức, không nằm ở file này.** File này chỉ
 nói bạn là ai và nói năng thế nào. Tách như vậy để khi cần sửa một câu trả lời,
-người sửa vào đúng một chỗ và bot đọc lại ngay bằng `/nap`.
+người sửa vào đúng một chỗ và bot đọc lại ngay khi được nhắn “nạp lại kho”.
 
 ---
 

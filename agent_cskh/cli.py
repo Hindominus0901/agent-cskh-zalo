@@ -281,7 +281,7 @@ def _check() -> int:
         if not s.owner_user_ids:
             loi(
                 "Chưa có OWNER_USER_IDS",
-                "chạy bot, nhắn /whoami cho nó, dán user_id vào .env",
+                "chạy bot, nhắn “id của tôi” cho nó, dán user_id vào .env",
             )
         else:
             ok(f"OWNER_USER_IDS: {len(s.owner_user_ids)} người")

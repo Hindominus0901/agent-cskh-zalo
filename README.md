@@ -85,7 +85,7 @@ làm lại gì cả.
 | **Kỹ năng** | `skills/` | Bot làm theo quy trình nào — báo giá, xử lý phàn nàn |
 
 Thứ bạn sửa thường xuyên nhất là **`knowledge/`**, và nó là Markdown thuần — sửa
-được bằng Notepad, hoặc sửa thẳng từ điện thoại bằng lệnh `/themtrang` ngay trong
+được bằng Notepad, hoặc sửa thẳng từ điện thoại — chỉ cần nhắn “thêm trang …” ngay trong
 Zalo.
 
 Kho tri thức theo phương pháp **LLM Wiki của Karpathy**: không vector database,
@@ -118,7 +118,8 @@ uv run agent-cskh chay     # chạy thật trên Zalo
 
 Chạy có tự khởi động lại: `.\run.ps1` (Windows) · `./run.sh` (macOS)
 
-Lệnh trong Zalo: `/help` · `/whoami` · `/baocao` · `/themtrang` · `/nap` · `/nhan`
+**Không có lệnh nào cả.** Trong Zalo bạn cứ nói bằng lời: *“báo cáo hôm nay”*,
+*“id của tôi”*, *“nạp lại kho”*, *“thêm trang công khai bang-gia”*, *“tôi nhận chat này”*.
 
 ---
 

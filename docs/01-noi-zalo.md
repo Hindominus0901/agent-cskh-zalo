@@ -137,7 +137,7 @@ Nhắn thử một câu bất kỳ. Bot trả lời là xong phần kết nối.
 
 Bot đang chạy nhưng chưa biết bạn là chủ. Nó coi bạn như một khách lạ.
 
-1. Nhắn cho bot: **`/whoami`**
+1. Nhắn cho bot: **“id của tôi”**
 2. Bot trả về `user_id` và `chat_id` của bạn
 3. Copy `user_id`, mở lại `.env`, dán vào:
 
@@ -146,7 +146,7 @@ OWNER_USER_IDS=user_id_vua_copy
 ```
 
 4. **Tắt bot (Ctrl+C) rồi chạy lại** — `.env` chỉ được đọc lúc khởi động
-5. Nhắn `/whoami` lần nữa, giờ phải thấy `quyền hiện tại: owner`
+5. Nhắn **“id của tôi”** lần nữa, giờ phải thấy `quyền hiện tại: owner`
 
 ---
 
@@ -154,7 +154,9 @@ OWNER_USER_IDS=user_id_vua_copy
 
 Bot cần một chỗ để báo khi có khách đang chờ, hoặc khi nó gặp sự cố.
 
-Trong **chat riêng** giữa bạn và bot, nhắn: **`/datkenhcanhbao`**
+Trong **chat riêng** giữa bạn và bot, nhắn: **“đặt kênh cảnh báo”**
+
+Bot sẽ hỏi lại một câu để xác nhận — nhắn **“đồng ý”** là xong.
 
 > ⚠️ **Đừng chạy lệnh này trong nhóm có khách hàng.** Nội dung cảnh báo kèm tên
 > khách và `chat_id` của họ — chạy nhầm chỗ là bạn kể chuyện khách A cho khách B.
@@ -170,7 +172,7 @@ không dấu, sai chính tả — cứ thử thật).
 - Trả lời sai trang → thêm cách hỏi đó vào `tu_khoa` của trang đúng
 - Nói "chưa nắm chắc" → kho thiếu trang đó, viết thêm
 
-Sửa xong file thì nhắn **`/nap`** cho bot — nó nạp lại ngay, không cần khởi động
+Sửa xong file thì nhắn **“nạp lại kho”** cho bot — nó nạp lại ngay, không cần khởi động
 lại.
 
 ---
@@ -205,14 +207,15 @@ bot trong khoảng 2 tiếng rồi tự hồi phục.
 
 ## Sau đó
 
-**Xem báo cáo:** nhắn `/baocao` bất cứ lúc nào, hoặc đợi báo cáo tự động 20h hàng
+**Xem báo cáo:** nhắn **“báo cáo hôm nay”** bất cứ lúc nào, hoặc đợi báo cáo tự động 20h hàng
 ngày. Mục *"câu bot KHÔNG trả lời được"* là danh sách việc cần làm — mỗi câu ở đó
 là một trang cần viết.
 
-**Sửa kho từ điện thoại:** `/dstrang`, `/xemtrang`, `/themtrang`, `/suatrang`.
+**Sửa kho từ điện thoại**, nói bằng lời: *“có những trang nào”*, *“xem trang bang-gia”*,
+*“thêm trang công khai bang-gia”* rồi xuống dòng viết nội dung, *“sửa trang …”*.
 Bản cũ luôn được giữ lại, sửa nhầm không mất.
 
-**Xem còn bao nhiêu tin:** `/trangthai`.
+**Xem còn bao nhiêu tin:** nhắn *“còn bao nhiêu tin”*.
 
 ---
 

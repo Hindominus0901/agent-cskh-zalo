@@ -103,7 +103,7 @@ nhầm vào trong chỉ làm bot trả lời thiếu, và cái đó lộ ra ngay
 > **11.** Khách để lại số điện thoại và nhu cầu thì anh/chị muốn lưu ở đâu, ai xem?
 >
 > **12.** Bot chuyển cho người thật thì chuyển cho ai ạ? (cần tên; `user_id` Zalo
-> lấy sau bằng lệnh `/whoami`)
+> lấy sau bằng cách nhắn “id của tôi” cho bot)
 >
 > **13.** Có cần bot nhắc lại khách sau vài ngày không?
 >

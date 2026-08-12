@@ -32,7 +32,10 @@ async def cmd_nhan(ctx: TurnContext) -> bool:
     # Viec da co nguoi lam thi khong duoc nhac nua — nhac tiep se day mot
     # dong nghiep thu hai vao cung mot cuoc tro chuyen.
     await ctx.tu_van.danh_dau_da_nhan(ctx.chat_id)
-    await ctx.reply("Đã tiếp quản hội thoại này. Bot sẽ im lặng cho tới khi anh/chị gõ /tha.")
+    await ctx.reply(
+        "Đã tiếp quản hội thoại này. Bot sẽ im lặng cho tới khi anh/chị nhắn "
+        "“trả lại cho bot”."
+    )
     log.info("handoff_tiep_quan", chat_id=ctx.chat_id[:8], by=ctx.principal.user_id[:8])
     return True
 

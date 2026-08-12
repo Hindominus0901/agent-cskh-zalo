@@ -63,7 +63,7 @@ Kiểm lần lượt:
 
 1. Cửa sổ chạy bot còn mở không? Đóng là bot tắt.
 2. Có thấy dòng `Bot: <tên> (id=...)` lúc khởi động không?
-3. Nhắn `/whoami` — bot trả lời thì nó đang sống, vấn đề nằm ở kho tri thức.
+3. Nhắn *“id của tôi”* — bot trả lời thì nó đang sống, vấn đề nằm ở kho tri thức.
 4. Nhắn trong **nhóm** thì phải @mention bot mới nghe.
 
 ---
@@ -82,7 +82,7 @@ Sửa: mở trang đó, thêm vào frontmatter đúng cách khách vừa hỏi:
 tu_khoa: ["bao nhieu tien", "gia", "mac khong", "tam nhieu", "co dat khong"]
 ```
 
-Rồi nhắn `/nap` cho bot.
+Rồi nhắn *“nạp lại kho”* cho bot.
 
 **Cách lấy `tu_khoa` cho đúng:** mở lại tin nhắn khách cũ và chép nguyên văn.
 Đừng ngồi nghĩ ra.
@@ -124,7 +124,7 @@ chmod +x run.sh
 
 ## Bot đang chạy nhưng sửa file wiki mà không thấy đổi
 
-Nhắn **`/nap`** cho bot. Nó nạp lại kho tri thức ngay, không cần khởi động lại.
+Nhắn **“nạp lại kho”** cho bot. Nó nạp lại ngay, không cần khởi động lại.
 
 Sửa `persona.md` hoặc `.env` thì **phải khởi động lại** — hai file đó chỉ đọc lúc
 bot khởi động.

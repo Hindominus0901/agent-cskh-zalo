@@ -177,7 +177,7 @@ class Application:
             log.warning(
                 "chua_dat_alert_chat_id",
                 hau_qua="Se khong ai nhan duoc canh bao khi bot hong",
-                cach_sua="Nhan /whoami cho bot roi dien chat_id vao ALERT_CHAT_ID",
+                cach_sua="Nhan 'id cua toi' cho bot roi dien chat_id vao ALERT_CHAT_ID",
             )
             print("Luu y: chua dat ALERT_CHAT_ID — bot hong se khong bao cho ai.")
             return
@@ -190,7 +190,7 @@ class Application:
         print(
             "CANH BAO: ALERT_CHAT_ID khong thuoc chu bot hay nhom noi bo nao.\n"
             "  Bot se KHONG gui canh bao di, de tranh lo noi dung noi bo cho nguoi ngoai.\n"
-            "  Sua: nhan /whoami cho bot de lay chat_id dung."
+            "  Sua: nhan 'id cua toi' cho bot de lay chat_id dung."
         )
 
     def _build_transport(self, client: ZaloClient) -> Transport:
