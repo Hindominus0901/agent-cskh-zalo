@@ -12,10 +12,10 @@ from __future__ import annotations
 
 import asyncio
 from collections.abc import Awaitable, Callable
+from typing import Protocol
 
 from agent_cskh.config import Settings
 from agent_cskh.harness import errors
-from agent_cskh.harness.loop import AgentLoop
 from agent_cskh.harness.turn import TurnContext
 from agent_cskh.health import Health
 from agent_cskh.llm.router import ModelRouter
@@ -31,6 +31,20 @@ from agent_cskh.transport.zalo_client import ZaloClient
 from agent_cskh.wiki import WikiStore
 
 log = get_logger(__name__)
+
+
+class VongMotLuot(Protocol):
+    """Bo nao xu ly mot luot.
+
+    Hai ban hien co: `harness.loop.AgentLoop` (goi Claude) va
+    `tra_cuu.chay.VongTraCuu` (0 dong, chi tra kho tri thuc).
+
+    Dung Protocol chu khong dung union hai kieu cu the: them mot bo nao thu ba
+    thi khong phai sua file nay.
+    """
+
+    async def run_turn(self, ctx: TurnContext) -> None: ...
+
 
 # Hang doi moi chat. Vuot nguong nay nghia la nguoi dung spam — bo tin moi nhat.
 QUEUE_MAX = 8
@@ -52,7 +66,11 @@ class TurnDispatcher:
         quota: QuotaGuard,
         buffer: ConversationBuffer,
         router: ModelRouter,
-        loop: AgentLoop,
+        # `AgentLoop` (che do ai) hoac `VongTraCuu` (che do tra_cuu, 0 dong).
+        # Dispatcher khong can biet minh dang chay cai nao — ca hai chi can co
+        # `run_turn(ctx)`. Dung Protocol chu khong dung union de them mot bo nao
+        # thu ba (vd: Gemini) khong phai sua file nay.
+        loop: VongMotLuot,
         wiki: WikiStore,
         kho_skill: KhoSkill | None = None,
         registry: ToolRegistry,

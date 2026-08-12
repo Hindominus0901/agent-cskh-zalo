@@ -91,49 +91,45 @@ class TraLoi:
     # Khac None nghia la phai ghi vao bang `thieu_trang`. Nguyen van cau hoi,
     # khong tom tat — chu bot can biet khach dung TU GI de dat ten trang moi.
     cau_hoi_thieu: str | None = None
-    # Cac slug dang cho khach chon, theo dung thu tu danh so.
-    dang_cho_chon: list[str] | None = None
 
 
 class DinhTuyenTraCuu:
-    """Mot the hien cho moi cuoc tro chuyen — no giu trang thai "dang cho chon"."""
+    """Khong giu trang thai nao giua cac luot — tra loi tung cau doc lap."""
 
     def __init__(self, wiki: WikiStore, *, ten_don_vi: str = "bên em") -> None:
         self._wiki = wiki
         self._ten = ten_don_vi
-        # chat_id -> danh sach slug dang cho khach go so
-        self._cho_chon: dict[str, list[str]] = {}
 
     def tra_loi(self, cau_hoi: str, *, chat_id: str, scope: frozenset[str]) -> TraLoi:
         cau_hoi = (cau_hoi or "").strip()
         if not cau_hoi:
             return TraLoi(text=self._chao())
 
-        # 1. Khach vua go mot con so de chon o luot truoc?
-        chon = self._doc_lua_chon(cau_hoi, chat_id, scope)
-        if chon is not None:
-            return chon
-
-        # 2. Chao hoi — tra loi thang, khong tim kiem.
+        # Chao hoi — tra loi thang, khong tim kiem.
         if self._la_chao(cau_hoi):
             return TraLoi(text=self._chao())
 
-        # 3. Tim trong kho.
         ket_qua = self._wiki.search_scored(cau_hoi, scope, limit=TOI_DA_LUA_CHON)
         quyet_dinh = phan_dinh(ket_qua)
 
         if quyet_dinh == "chac":
             return TraLoi(text=self._dung_tra_loi(ket_qua[0][1]))
 
-        if quyet_dinh == "phong_doan":
+        # KHONG CHAC LAM — tra loi trang khop nhat nhung noi ro la dang doan.
+        #
+        # Truoc 11/08/2026 cho nay dua ra mot menu danh so va bao khach "nhan so
+        # giup em". Da bo: menu danh so cung la mot dang LENH. Khach that khong
+        # doc menu, ho go tiep cau hoi cua ho — va luc do con so lac cua luot
+        # truoc lam bot mo nham mot trang chang lien quan.
+        #
+        # Doan mot cach thanh that thi tu sua duoc trong mot luot: khach doc dong
+        # dau la biet ngay co dung y minh khong.
+        if quyet_dinh in ("phong_doan", "hoi_lai"):
             trang = ket_qua[0][1]
             return TraLoi(
                 text=f"Dạ có phải anh/chị đang hỏi về **{trang.title}** không ạ:\n\n"
                 + self._dung_tra_loi(trang)
             )
-
-        if quyet_dinh == "hoi_lai":
-            return self._hoi_lai(ket_qua, chat_id)
 
         log.info("tra_cuu_khong_biet", chat_id=chat_id[:8], cau_hoi=cau_hoi[:120])
         return TraLoi(
@@ -160,39 +156,3 @@ class DinhTuyenTraCuu:
             than = than[:MAX_THAN_BAI].rsplit("\n", 1)[0].rstrip() + "\n\n[...]"
         return f"{than}\n\n— Nếu chưa đúng ý, anh/chị nhắn lại giúp em ạ."
 
-    def _hoi_lai(self, ket_qua: list[tuple[int, WikiPage]], chat_id: str) -> TraLoi:
-        """Zalo khong co nut bam, nen lua chon phai la so de khach go lai."""
-        trang = [p for _, p in ket_qua][:TOI_DA_LUA_CHON]
-        dong = ["Dạ anh/chị đang hỏi về ý nào ạ:", ""]
-        dong += [f"{i}. {p.title}" for i, p in enumerate(trang, 1)]
-        dong += ["", "Anh/chị nhắn số giúp em, hoặc hỏi rõ hơn ạ."]
-
-        slugs = [p.slug for p in trang]
-        self._cho_chon[chat_id] = slugs
-        return TraLoi(text="\n".join(dong), dang_cho_chon=slugs)
-
-    def _doc_lua_chon(self, cau: str, chat_id: str, scope: frozenset[str]) -> TraLoi | None:
-        """Khach go "2" ngay sau mot cau hoi lai thi mo dung trang thu hai.
-
-        Chi nhan khi tin nhan CHI CO mot con so. "2 cai gia bao nhieu" khong phai
-        lua chon — do la cau hoi moi, va doan nham no thanh lua chon thi bot tra
-        ve mot trang chang lien quan.
-        """
-        slugs = self._cho_chon.get(chat_id)
-        if not slugs:
-            return None
-        goc = cau.strip().rstrip(".")
-        if not goc.isdigit():
-            # Khach hoi tiep chuyen khac — bo trang thai cho, xu ly nhu cau moi.
-            self._cho_chon.pop(chat_id, None)
-            return None
-
-        so = int(goc)
-        self._cho_chon.pop(chat_id, None)
-        if not 1 <= so <= len(slugs):
-            return TraLoi(text=f"Dạ em chỉ có {len(slugs)} mục thôi ạ, anh/chị chọn lại giúp em.")
-
-        trang = self._wiki.read(slugs[so - 1], scope)
-        if trang is None:
-            return TraLoi(text=MSG_KHONG_BIET, can_nguoi_that=True)
-        return TraLoi(text=self._dung_tra_loi(trang))

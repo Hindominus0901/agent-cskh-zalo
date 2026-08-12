@@ -312,9 +312,18 @@ class WikiStore:
             #
             # Doi chieu voi `q` CHUA LOC hu tu, vi cum khai bao thuong chua chung
             # ("mac khong", "co dat khong", "hong thi sao").
+            #
+            # PHAI KHOP THEO RANH GIOI TU, khong phai chuoi con — bug 12/08/2026.
+            # Ban dau cho nay viet `c in q`, nen mot `tu_khoa: ["gia"]` an tron 25
+            # diem cho cau "bên mình có GIAo hàng đi Đà Nẵng không": "gia" nam
+            # trong "giao". Trang bang gia thang tuyet doi moi cau hoi ve giao
+            # hang, va cau do khong bao gio duoc ghi vao `thieu_trang`.
+            #
+            # Dung dung cai bay ma dong 286 ben tren da canh bao: tieng Viet viet
+            # roi am tiet nen chuoi con sai rat nhieu.
             for cum in page.tu_khoa:
                 c = strip_accents(cum).strip()
-                if len(c) > 2 and c in q:
+                if len(c) > 2 and re.search(rf"\b{re.escape(c)}\b", q):
                     score += 25
                     break
 

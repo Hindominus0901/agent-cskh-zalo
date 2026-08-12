@@ -58,6 +58,18 @@ def wiki(tmp_path, monkeypatch):
         ),
         encoding="utf-8",
     )
+    # Trang KHONG khai `tu_khoa` — cho co that, va la cach duy nhat de roi vao
+    # vung "khong chac lam": khong co cum khai bao thi khong an thuong +25.
+    (goc / "public" / "uu-dai.md").write_text(
+        _trang(
+            "uu-dai",
+            "Ưu đãi",
+            "Chương trình đang chạy",
+            "Giảm 10% cho đơn thứ hai.",
+            [],
+        ),
+        encoding="utf-8",
+    )
     (goc / "internal" / "gia-von.md").write_text(
         _trang(
             "gia-von",
@@ -199,6 +211,21 @@ class TestCumTuKhoaKhopNguyenVan:
         kq = dt.tra_loi("quán có bán bánh ngọt không", chat_id="c1", scope=CONG_KHAI)
         assert kq.can_nguoi_that
 
+    def test_cum_phai_khop_RANH_GIOI_TU_khong_phai_chuoi_con(self, wiki) -> None:
+        """Bug 12/08/2026, do chinh thuong +25 nay sinh ra.
+
+        Ban dau doi chieu bang `c in q` (chuoi con), nen `tu_khoa: ["gia"]` an
+        tron 25 diem cho cau "có GIAo hàng đi Đà Nẵng không" — "gia" nam trong
+        "giao". Trang bang gia thang tuyet doi moi cau hoi ve giao hang, va cau
+        do khong bao gio duoc ghi vao `thieu_trang` de chu shop biet ma bo sung.
+
+        Dung cai bay tieng Viet ma `search_scored` da canh bao ngay dong ben canh.
+        """
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("bên mình có giao hàng đi Đà Nẵng không", chat_id="c1", scope=CONG_KHAI)
+        assert "5 triệu" not in kq.text, "'gia' khong duoc khop vao giua 'giao'"
+        assert kq.can_nguoi_that
+
 
 class TestKhongBietThiGhiLai:
     """Nua kia cua vong lap hoc. Bot tu choi rat ngoan ma khong ghi lai thi chu
@@ -223,43 +250,44 @@ class TestKhongBietThiGhiLai:
         assert kq.cau_hoi_thieu is None
 
 
-class TestHoiLaiBangSo:
-    """Zalo khong co nut bam nen lua chon phai la so."""
+class TestKhongDoanBuaKhiKhongChac:
+    """Truoc 11/08/2026 cho nay dua ra mot MENU DANH SO va bao khach "nhan so
+    giup em". Da bo: menu danh so cung la mot dang lenh, ma khach that khong doc
+    menu — ho go tiep cau hoi cua ho.
 
-    def test_go_so_thi_mo_dung_trang(self, wiki) -> None:
+    Te hon: con so lac cua luot truoc lam bot mo nham mot trang chang lien quan.
+    Gio bot doan mot cach thanh that, va khach sua duoc trong mot luot.
+    """
+
+    def test_khong_chac_thi_noi_ro_la_dang_doan(self, wiki) -> None:
         dt = DinhTuyenTraCuu(wiki)
-        dt._cho_chon["c1"] = ["bang-gia", "bao-hanh"]  # noqa: SLF001
-        kq = dt.tra_loi("2", chat_id="c1", scope=CONG_KHAI)
-        assert "24 tháng" in kq.text
+        kq = dt.tra_loi("ưu đãi gì", chat_id="c1", scope=CONG_KHAI)
+        assert "có phải" in kq.text.lower()
+        assert "10%" in kq.text
 
-    def test_so_ngoai_khoang_thi_bao_chon_lai(self, wiki) -> None:
+    def test_chac_chan_thi_tra_loi_thang_khong_rao_don(self, wiki) -> None:
+        """Chu shop khai `mac khong` vao tu_khoa nghia la ho da noi thang: hoi
+        kieu do la hoi trang gia. Luc do rao don la thua."""
         dt = DinhTuyenTraCuu(wiki)
-        dt._cho_chon["c1"] = ["bang-gia", "bao-hanh"]  # noqa: SLF001
-        kq = dt.tra_loi("7", chat_id="c1", scope=CONG_KHAI)
-        assert "chọn lại" in kq.text
-
-    def test_cau_co_so_NHUNG_la_cau_hoi_moi_thi_khong_tinh_la_lua_chon(self, wiki) -> None:
-        """"2 cái giá bao nhiêu" la cau hoi moi, khong phai lua chon so 2.
-
-        Doan nham no thanh lua chon thi bot bung thang trang `bang-gia` (phan tu
-        thu 2 cua danh sach cho) ra nhu mot cau tra loi chac chan — trong khi
-        khach chi vua hoi mot cau moi. Diem cua no phai duoc tinh lai tu dau.
-        """
-        # Xep bao-hanh o vi tri SO 2 de phep thu khong mo ho: neu bot hieu nham
-        # "2" la lua chon thi no se bung trang bao hanh, mot trang chang lien
-        # quan gi toi cau hoi ve gia.
-        dt = DinhTuyenTraCuu(wiki)
-        dt._cho_chon["c1"] = ["bang-gia", "bao-hanh"]  # noqa: SLF001
-        kq = dt.tra_loi("2 cái giá bao nhiêu", chat_id="c1", scope=CONG_KHAI)
-        # KHONG duoc mo trang thu 2 nhu mot lua chon...
-        assert "24 tháng" not in kq.text
-        # ...ma phai tinh diem lai tu dau va ra dung trang gia.
+        kq = dt.tra_loi("cái này mắc không", chat_id="c1", scope=CONG_KHAI)
         assert "5 triệu" in kq.text
-        # Trang thai cho chon phai bi xoa — cau sau khong con la lua chon nua.
-        assert dt._cho_chon.get("c1") is None  # noqa: SLF001
+        assert "có phải" not in kq.text.lower()
 
-    def test_trang_thai_cho_chon_khong_ro_ri_giua_hai_khach(self, wiki) -> None:
+    def test_khong_con_menu_danh_so(self, wiki) -> None:
         dt = DinhTuyenTraCuu(wiki)
-        dt._cho_chon["c1"] = ["bang-gia", "bao-hanh"]  # noqa: SLF001
-        kq = dt.tra_loi("2", chat_id="c2", scope=CONG_KHAI)
+        kq = dt.tra_loi("ưu đãi gì", chat_id="c1", scope=CONG_KHAI)
+        assert "nhắn số" not in kq.text
+        assert "\n1." not in kq.text
+
+    def test_khong_giu_trang_thai_giua_cac_luot(self, wiki) -> None:
+        """Khong con trang thai "dang cho chon" nen khong the ro ri giua hai
+        khach, va restart cung khong mat gi."""
+        dt = DinhTuyenTraCuu(wiki)
+        assert not hasattr(dt, "_cho_chon")
+
+    def test_con_so_don_doc_khong_lam_bot_mo_trang_la(self, wiki) -> None:
+        """Khach go "2" ma khong co ngu canh gi thi khong duoc mo trang nao ca."""
+        dt = DinhTuyenTraCuu(wiki)
+        kq = dt.tra_loi("2", chat_id="c1", scope=CONG_KHAI)
         assert "24 tháng" not in kq.text
+        assert "5 triệu" not in kq.text

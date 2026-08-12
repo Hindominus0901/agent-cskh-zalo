@@ -12,7 +12,7 @@ import signal
 
 from agent_cskh.commands import handle as handle_command
 from agent_cskh.config import Settings
-from agent_cskh.harness.dispatcher import TurnDispatcher
+from agent_cskh.harness.dispatcher import TurnDispatcher, VongMotLuot
 from agent_cskh.harness.loop import AgentLoop
 from agent_cskh.health import Health
 from agent_cskh.llm.router import ModelRouter
@@ -24,11 +24,30 @@ from agent_cskh.skills import KhoSkill
 from agent_cskh.store import Database
 from agent_cskh.store.repo import BoNhoRepo, ChatRepo, TuVanRepo
 from agent_cskh.tools import default_registry
+from agent_cskh.tra_cuu.chay import VongTraCuu
 from agent_cskh.transport import PollingTransport, WebhookTransport, ZaloClient
 from agent_cskh.transport.base import Transport
 from agent_cskh.wiki import WikiStore
 
 log = get_logger(__name__)
+
+
+def chon_bo_nao(settings: Settings, wiki: WikiStore) -> VongMotLuot:
+    """Chon bo nao theo `CHE_DO`. DAY LA CHO DUY NHAT `che_do` doi hanh vi bot.
+
+    Tach thanh ham rieng de test duoc — day la dong quan trong nhat cua ca file,
+    va truoc 11/08/2026 no KHONG TON TAI.
+
+    Luc do `che_do` chi duoc doc o `config.py` va `cli.py`; duong chay Zalo luon
+    dung `AgentLoop`. Hoc vien de `CHE_DO=tra_cuu` roi chay bot -> bot van goi
+    Claude, va `config.problems()` khong bao gi vi no chi kiem API key khi
+    `che_do == "ai"`. Ca loi hua "ban 0 dong chay tren Zalo" la khong dung.
+
+    Hai lop deu co `run_turn(ctx)` nen dispatcher khong can biet minh chay cai nao.
+    """
+    if settings.che_do == "tra_cuu":
+        return VongTraCuu(wiki)
+    return AgentLoop()
 
 
 class Application:
@@ -54,6 +73,13 @@ class Application:
         kho_skill.nap()
         registry = default_registry()
 
+        vong = chon_bo_nao(self._s, wiki)
+        log.info("che_do_dang_chay", che_do=self._s.che_do, bo_nao=type(vong).__name__)
+        print(
+            f"Chế độ: {self._s.che_do}"
+            + ("  (0 đồng, không gọi API)" if self._s.che_do == "tra_cuu" else "")
+        )
+
         async with ZaloClient(self._s, on_sent=quota.count_sent, on_received=None) as client:
             me = await self._verify_token(client)
             if me is None:
@@ -73,7 +99,7 @@ class Application:
                 quota=quota,
                 buffer=ConversationBuffer(repo),
                 router=ModelRouter(self._s),
-                loop=AgentLoop(),
+                loop=vong,
                 wiki=wiki,
                 kho_skill=kho_skill,
                 registry=registry,

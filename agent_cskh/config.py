@@ -163,10 +163,17 @@ class Settings(BaseSettings):
             out.append("ZALO_BOT_TOKEN trong — tao bot trong app Zalo qua OA \"Zalo Bot Manager\", xem docs/01-noi-zalo.md")
         elif ":" not in self.token:
             out.append("ZALO_BOT_TOKEN sai dinh dang (phai co dang <id>:<secret>)")
+        # Thieu key o che do `ai` la loi CHAN CHAY, khong phai canh bao.
+        #
+        # Truoc 11/08/2026 cho nay chi kiem khi `che_do == "ai"` va `che_do` lai
+        # khong duoc doc o dau trong duong chay Zalo — nen dat `tra_cuu` roi chay
+        # thi bot van goi Claude ma khong ai bao gi, roi chet luc goi model that.
+        # Gio `app.py` da re nhanh theo `che_do`, va dieu kien nay dung tro lai.
         if self.che_do == "ai" and not self.anthropic_api_key.get_secret_value():
             out.append(
                 "CHE_DO=ai nhung ANTHROPIC_API_KEY trong "
-                "— lay tai https://console.anthropic.com, hoac doi ve CHE_DO=tra_cuu"
+                "— lay tai https://console.anthropic.com, hoac doi ve CHE_DO=tra_cuu "
+                "de chay mien phi bang kho tri thuc"
             )
         if self.transport == "webhook" and not self.webhook_url:
             out.append("TRANSPORT=webhook nhung WEBHOOK_URL trong")
