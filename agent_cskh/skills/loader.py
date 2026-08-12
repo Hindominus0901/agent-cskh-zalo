@@ -93,9 +93,18 @@ class Skill:
     def dong_muc_luc(self) -> str:
         # `khi_nao` la thu quyet dinh model co mo skill dung luc hay khong. Mot
         # mo ta hay ma khong noi KHI NAO dung thi skill nam do khong ai goi.
+        dong = f"- **{self.ten}** — {self.mo_ta}"
         if self.khi_nao:
-            return f"- **{self.ten}** — {self.mo_ta} _(dùng khi: {self.khi_nao})_"
-        return f"- **{self.ten}** — {self.mo_ta}"
+            dong += f" _(dùng khi: {self.khi_nao})_"
+        # `cong_cu` PHAI hien ra day. Truoc 12/08/2026 truong `tools:` chi duoc
+        # doc vao roi khong dung o dau — mot truong trang tri. Hoc vien viet
+        # `tools: [dat_hang]` se tuong minh vua cap quyen cho skill do.
+        #
+        # Dua vao muc luc thi no co tac dung that: model biet truoc skill nay
+        # can gi, va thay ngay khi mot cong cu trong do khong ton tai.
+        if self.cong_cu:
+            dong += f" [cần: {', '.join(self.cong_cu)}]"
+        return dong
 
 
 def doc_skill(thu_muc: Path) -> Skill | None:

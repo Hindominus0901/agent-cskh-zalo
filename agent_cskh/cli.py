@@ -271,6 +271,41 @@ def _check() -> int:
             f"{', '.join(x.ten for x in cho_duyet[:3])}"
         )
 
+    # Skill khai mot cong cu KHONG TON TAI.
+    #
+    # Truong `tools:` truoc day chi la trang tri, nen khong ai phat hien khi no
+    # sai. Gio no hien ra trong muc luc prompt, va mot cai ten sai o do la mot
+    # loi hua voi model ve nang luc khong co.
+    # PHAI phan biet hai truong hop, neu khong se bao dong gia:
+    #   - Ten go sai, khong ton tai o dau ca        -> loi that
+    #   - Ton tai trong ma nguon nhung dang TAT      -> binh thuong, chi ghi chu
+    #     (nhom don hang tat khi chua co data/don_hang.csv)
+    #
+    # Khong tach hai truong hop nay thi mot shop khong ban hang vat ly se KHONG
+    # BAO GIO xanh duoc — va mot preflight khong bao gio xanh thi vai ngay la
+    # khong ai nhin no nua.
+    from agent_cskh.tools import DON_HANG_TOOLS, default_registry
+
+    dang_bat = {t.name for t in default_registry(s)._tools.values()}  # noqa: SLF001
+    co_the_bat = {t.name for t in DON_HANG_TOOLS}
+    moi_ten = dang_bat | co_the_bat
+
+    dang_tat_bi_dung: set[str] = set()
+    for sk in duoc_nap:
+        khong_co = [c for c in sk.cong_cu if c not in moi_ten]
+        if khong_co:
+            loi(
+                f"Kỹ năng “{sk.ten}” khai công cụ KHÔNG TỒN TẠI: {', '.join(khong_co)}",
+                f"gõ sai tên? sửa trường `tools:` trong skills/{sk.ten}/SKILL.md",
+            )
+        dang_tat_bi_dung |= {c for c in sk.cong_cu if c in co_the_bat and c not in dang_bat}
+
+    if dang_tat_bi_dung:
+        xanh.append(
+            "  [ ]     Nhóm công cụ đơn hàng đang TẮT (chưa có data/don_hang.csv) — "
+            "bình thường nếu bạn không bán hàng vật lý"
+        )
+
     # --- zalo (khong bat buoc) ---
     if not s.token:
         xanh.append("  [ ]     Chưa nối Zalo — chạy `agent-cskh chat` để thử trước")
