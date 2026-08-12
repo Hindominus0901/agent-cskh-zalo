@@ -151,6 +151,8 @@ Chạy có tự khởi động lại: `.\run.ps1` (Windows) · `./run.sh` (macOS
 - Không có nút bấm. Tin nhắn tối đa 2.000 ký tự.
 - **Bot vào được nhóm chat** (3 nhóm, beta) — đây là thứ Zalo OA doanh nghiệp
   KHÔNG làm được, và là lý do Bot Creator hợp với lớp học và cộng đồng.
+  Cách dùng trong nhóm (phải @mention, và **gửi ảnh phải tag bot ngay trên ảnh**):
+  [docs/06-dung-bot-tren-zalo.md](docs/06-dung-bot-tren-zalo.md)
 
 ---
 

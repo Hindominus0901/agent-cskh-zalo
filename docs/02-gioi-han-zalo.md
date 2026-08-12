@@ -67,14 +67,19 @@ chế độ `ai`). Câu này đã có sẵn trong phần trợ giúp của bot.
 
 ## 4. Không có nút bấm
 
-Không có menu, không có nút "Xem bảng giá", không có nút "Đặt hàng". Mọi tương
-tác là **chữ** hoặc **lệnh `/`**.
+Không có menu, không có nút "Xem bảng giá", không có nút "Đặt hàng". **Mọi tương
+tác là chữ.**
 
-Vì vậy khi bot cần khách chọn, nó đưa danh sách đánh số và mời khách **nhắn số**:
+Template này cố tình **không** bù bằng menu đánh số kiểu *"nhắn 1 để xem bảng giá"*.
+Khách thật không đọc menu — họ gõ tiếp câu hỏi của mình, rồi con số lạc của lượt
+trước làm bot mở nhầm một trang chẳng liên quan.
 
-> Dạ anh/chị đang hỏi về ý nào ạ:
-> 1. Bảng giá
-> 2. Chính sách đổi trả
+Thay vào đó, khi không chắc thì bot **đoán một cách thành thật**:
+
+> Dạ có phải anh/chị đang hỏi về **Bảng giá** không ạ:
+> …
+
+Khách đọc dòng đầu là biết ngay có đúng ý mình không, và sửa được trong một lượt.
 
 ---
 
@@ -98,6 +103,11 @@ Cách thêm: mở mini app **Zalo Bot Creator**, chọn bot, thêm vào nhóm.
 Trong nhóm, bot chỉ nghe khi được **@mention** hoặc khi có người **trả lời trực
 tiếp** tin của bot. Nó không đọc toàn bộ chat nhóm — vừa riêng tư hơn, vừa đỡ tốn
 hạn mức.
+
+> **Cái bẫy hay gặp nhất:** gửi ảnh trong nhóm thì phải tag bot **ngay trong phần
+> chú thích của chính tấm ảnh**. Tag ở tin trước rồi mới gửi ảnh ở tin sau thì bot
+> **không nhận được ảnh** — và người ta tưởng bot hỏng.
+> Xem [`06-dung-bot-tren-zalo.md`](06-dung-bot-tren-zalo.md).
 
 Hợp với: lớp học, cộng đồng, nhóm khách VIP, nhóm nội bộ — chỗ cần một trợ lý
 ngồi sẵn trả lời câu lặp đi lặp lại.
@@ -149,5 +159,6 @@ nhiên: `Bot Gác Nhỏ` đọc ổn hơn `Bot CSKH GN-2026`.
 | 3.000 tin/tháng | Viết trang wiki tốt để bot trả đúng ngay lượt đầu |
 | Tắt máy mất tin | VPS nếu chạy thật |
 | Không nhận file | Dặn khách chụp màn hình |
-| Không có nút | Danh sách đánh số, khách nhắn số |
+| Không có nút | Bot đoán thành thật (“có phải anh/chị hỏi về X không ạ”) |
 | 2.000 ký tự | Trang ngắn, mỗi trang một câu hỏi |
+| Trong nhóm phải @mention | Ghim hướng dẫn vào nhóm — có đoạn dán sẵn ở [06-dung-bot-tren-zalo.md](06-dung-bot-tren-zalo.md) |

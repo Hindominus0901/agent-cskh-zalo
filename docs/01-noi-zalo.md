@@ -300,6 +300,10 @@ Bản cũ luôn được giữ lại, sửa nhầm không mất.
 
 **Xem còn bao nhiêu tin:** nhắn *“còn bao nhiêu tin”*.
 
+**Đưa bot cho khách và thêm vào nhóm:** xem
+[`06-dung-bot-tren-zalo.md`](06-dung-bot-tren-zalo.md) — có cả đoạn văn dán sẵn
+để hướng dẫn cả nhóm.
+
 ---
 
 ## Chạy 24/7
