@@ -228,3 +228,25 @@ uv run ruff check .
 Nhóm test quan trọng nhất là `tests/test_authz.py` và `tests/test_wiki.py` —
 chúng chặn tài liệu nội bộ rò ra cho khách. **Một test ở đó đỏ thì dừng lại sửa
 trước khi làm gì khác.**
+
+---
+
+## Ai làm cái này
+
+**Hiếu** — làm marketing, phễu và hệ thống cho doanh nghiệp, và tư vấn đưa AI vào
+vận hành thật.
+
+Repo này là một phần trong đó: con bot CSKH mà chủ shop **tự dựng được**, không
+cần biết lập trình.
+
+**Tôi giúp được gì:**
+
+- **Dịch vụ marketing, làm phễu, xây hệ thống** — từ khách lạ đến đơn hàng, chứ
+  không dừng ở chạy quảng cáo
+- **Tư vấn ứng dụng AI vào vận hành** — chọn đúng chỗ đáng tự động hoá, và quan
+  trọng hơn là chỗ **không nên**
+
+**Liên hệ:** [facebook.com/minh.hieu.pham.202148](https://www.facebook.com/minh.hieu.pham.202148)
+
+Dựng bot xong mà muốn đi tiếp — nối vào phễu, đo chuyển đổi, mở sang kênh khác —
+thì cứ nhắn.
