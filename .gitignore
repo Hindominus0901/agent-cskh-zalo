@@ -18,3 +18,10 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 .DS_Store
+
+# Ban sao skill do cong cu khac tu sinh ra. KHONG dua vao repo:
+# `.agents/skills/khoi-tao/SKILL.md` tung xuat hien voi chu "claude" bi thay may
+# moc thanh "Codex", tao ra cau tu mau thuan ("Codex khong quet thu muc .Codex/").
+# Nguon su that la HUONG-DAN-AGENT.md + PHONG-VAN.md — mot ban sao thu ba chi
+# de lech nhau roi lam hoc vien doc nham.
+.agents/
